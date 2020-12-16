@@ -35,27 +35,36 @@ def get_id_of_newest_playlist() -> str:
     return new_playlist['items'][0]['id']
 
 
-def get_new_track_list(artists_id_list: List[str], tracks_from_old_playlist: List[str]):
+def get_new_track_list(artists_id_list: List[str], tracks_from_old_playlist: List[str]) -> List[str]:
     track_list = []
     for artist_id in artists_id_list:
-        top_tracks = spotify.artist_top_tracks(artist_id, country='US')
-        for track in top_tracks:
-            pass
+        top_tracks = spotify.artist_top_tracks(artist_id, country='PL')['tracks']
+        top_tracks_length = len(top_tracks)
+        for track_index in range(top_tracks_length):
+            track_id = top_tracks[track_index]['id']
+            if track_id in tracks_from_old_playlist:
+                continue # We dont want duplicates
+            else:
+                track_list.append(track_id)
+                break # We want only one corresponding track
+    return track_list
+
 
 def create_list_of_tracks(playlist_id: str, tracks: List[str]) -> List[str]:
     pass
 
-
-
-
-#
-# sp.user_playlist_add_tracks(user=user, playlist_id=playlist_id, tracks=['spotify:track:6OQCLaG8vDoRcgi7vzYEQK'])
 old_playlist_id = 'spotify:playlist:2Pcd729IGTgs9QfkA7kjqe'
 def main():
     # create_new_playlist('nowa_playlista')
     new_playlist_id = get_id_of_newest_playlist()
-    artists_from_old_playlist = get_playlist_items(new_playlist_id, 'artist')
+    artists_from_old_playlist = get_playlist_items(old_playlist_id, 'artist')
+    # print(artists_from_old_playlist)
     tracks_from_old_playlist = get_playlist_items(old_playlist_id, 'track')
-    print(tracks_from_old_playlist)
+    new_track_list = get_new_track_list(artists_from_old_playlist, tracks_from_old_playlist)
+    spotify.user_playlist_add_tracks(user=user, playlist_id=new_playlist_id, tracks=new_track_list)
+
+    # top_tracks = spotify.artist_top_tracks('spotify:artist:7M1FPw29m5FbicYzS2xdpi', country="PL")['tracks']
+    # top_track = top_tracks[4]['name']
+    # print(top_track)
 
 main()
