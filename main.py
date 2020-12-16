@@ -71,7 +71,7 @@ def get_non_popular_tracks(artists_id_list: List[str], tracks_from_old_playlist:
                 break
     return track_list
 
-old_playlist_id = 'spotify:playlist:1qBB4GjHyKZYnQclPJfNe0'
+old_playlist_id = 'spotify:playlist:2oHKnV8uHRPIyysDn5SjL0'
 def create_new_playlist_from_not_mentioned_top_songs():
     new_playlist_id = get_id_of_newest_playlist()
     artists_from_old_playlist = get_playlist_items(old_playlist_id, 'artist')
