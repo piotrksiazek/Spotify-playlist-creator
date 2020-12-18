@@ -84,4 +84,27 @@ class Playlist:
                     break
         return track_list
 
+    @staticmethod
+    def create_new_playlist(spotify: Spotify, name: str, user: str):
+        """Just a wrapper around already existing spotipy function"""
+        spotify.user_playlist_create(user=user, name=name)
+
+    @staticmethod
+    def get_least_popular_track(spotify: Spotify, artist_id: str):
+        track_id_with_popularity = dict()
+        albums = spotify.artist_albums(artist_id)['items']
+        for album_index in range(len(albums)):
+            album_id = albums[album_index]['id']
+            tracks = spotify.album_tracks(album_id)['items']
+            for track_index in range(len(tracks)):
+                track_id = tracks[track_index]['id']
+                track_popularity = spotify.track(track_id)['popularity']
+                track_id_with_popularity[track_id] = track_popularity
+        return spotify.track(min(track_id_with_popularity, key=lambda key: track_id_with_popularity[key]))['name']
+
+    @staticmethod
+    def get_hipster_tracks(spotify: Spotify, artists_id_list: List[str], tracks_from_old_playlist: List[str]) -> List[str]:
+        pass
+
+
 
