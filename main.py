@@ -35,13 +35,14 @@ def create_new_hipster_playlist():
     tracks_from_old_playlist = Playlist.get_playlist_items(spotify, old_playlist_id, 'track', unique=False)
     artists_from_old_playlist = Playlist.get_playlist_items(spotify, old_playlist_id, 'artist', unique=True)
 
+
 # print(spotify.album_tracks('spotify:album:0qZTwrunzX3LG45PvRghmh')['items'][0]['id'])
 # print(spotify.track('3bWGaqVeYKMlLss40mPgNn')['popularity'])
 
 
-album_id = spotify.artist_albums('spotify:artist:7M1FPw29m5FbicYzS2xdpi')['items'][0]['id']
-tracks = spotify.album_tracks(album_id)['items'][0]['id']
-pop = spotify.track(tracks)['popularity']
-print(pop)
+# album_id = spotify.artist_albums('spotify:artist:7M1FPw29m5FbicYzS2xdpi')['items'][0]['id']
+# tracks = spotify.album_tracks(album_id)['items'][0]['id']
+# pop = spotify.track(tracks)['popularity']
+# print(pop)
 
-print(Playlist.get_least_popular_track(spotify, 'spotify:artist:3vWL2MmOBNpJAP2tw1TLQw'))
+id = Playlist.get_the_least_popular_track_id(spotify, 'spotify:artist:3vWL2MmOBNpJAP2tw1TLQw', return_all=True)
