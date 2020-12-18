@@ -4,15 +4,16 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 from spotipy.oauth2 import SpotifyOAuth
 import config
+from Playlist import Playlist
 
 scope = config.scope
 my_uri = config.my_uri
 user = config.user
-spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
+# spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
 spotify = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
 
 
-def get_playlist_items(playlist_id: str, type_of_item: str) -> List[str]:
+def get_playlist_items(playlist_id: str, type_of_item: str) -> List[str]: ###
     playlist = spotify.playlist_items(playlist_id)
     artists_from_playlist = []
     if type_of_item == 'artist':
@@ -29,12 +30,12 @@ def get_playlist_items(playlist_id: str, type_of_item: str) -> List[str]:
 def create_new_playlist(name: str):
     spotify.user_playlist_create(user=user, name=name)
 
-def get_id_of_newest_playlist() -> str:
+def get_id_of_newest_playlist() -> str: ###
     new_playlist = spotify.current_user_playlists(limit=1, offset=0)
     return new_playlist['items'][0]['id']
 
 
-def get_new_listed_top_tracks(artists_id_list: List[str], tracks_from_old_playlist: List[str]) -> List[str]:
+def get_new_listed_top_tracks(artists_id_list: List[str], tracks_from_old_playlist: List[str]) -> List[str]: ###
     track_list = []
     for artist_id in artists_id_list:
         top_tracks = spotify.artist_top_tracks(artist_id, country='PL')['tracks']
@@ -49,7 +50,7 @@ def get_new_listed_top_tracks(artists_id_list: List[str], tracks_from_old_playli
     return track_list
 
 
-def get_non_popular_tracks(artists_id_list: List[str], tracks_from_old_playlist: List[str]) -> List[str]:
+def get_non_popular_tracks(artists_id_list: List[str], tracks_from_old_playlist: List[str]) -> List[str]: ###
     track_list = []
     for artist_index, artist_id in enumerate(artists_id_list):
         while True:
@@ -83,10 +84,10 @@ def create_new_playlist_from_not_mentioned_top_songs():
 
 def create_new_playlist_from_corresponding_random_tracks():
     new_playlist_id = get_id_of_newest_playlist()
-    artists_from_old_playlist = get_playlist_items(old_playlist_id, 'artist')
+    # artists_from_old_playlist = get_playlist_items(old_playlist_id, 'artist')
     tracks_from_old_playlist = get_playlist_items(old_playlist_id, 'track')
+    artists_from_old_playlist = Playlist.get_playlist_items(spotify, old_playlist_id, 'artist', True)
     new_track_list = get_non_popular_tracks(artists_from_old_playlist, tracks_from_old_playlist)
     spotify.user_playlist_add_tracks(user=user, playlist_id=new_playlist_id, tracks=new_track_list)
-
 
 create_new_playlist_from_corresponding_random_tracks()
