@@ -4,6 +4,7 @@ from spotipy.oauth2 import SpotifyOAuth
 import config
 
 from Playlist import Playlist
+from Track import Track
 
 scope = config.scope
 my_uri = config.my_uri
@@ -11,7 +12,7 @@ user = config.user
 # spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
 spotify = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
 
-old_playlist_id = 'spotify:playlist:2oHKnV8uHRPIyysDn5SjL0'
+old_playlist_id = 'spotify:playlist:4roKSRw2Ouh5SmQJYHNoiB'
 
 
 def create_new_playlist_from_not_mentioned_top_songs():
@@ -45,4 +46,7 @@ def create_new_hipster_playlist():
 # pop = spotify.track(tracks)['popularity']
 # print(pop)
 
-id = Playlist.get_the_least_popular_track_id(spotify, 'spotify:artist:3vWL2MmOBNpJAP2tw1TLQw', return_all=True)
+# id = Track.get_the_least_popular_track_id(spotify, 'spotify:artist:3vWL2MmOBNpJAP2tw1TLQw', reverse=True)
+# print(spotify.track(id)['popularity'])
+
+create_new_playlist_from_corresponding_random_tracks()
