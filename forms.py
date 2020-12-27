@@ -8,7 +8,8 @@ class OriginDestination(FlaskForm):
     destination_playlist = PasswordField('Destination', validators=[DataRequired()])
     submit = SubmitField('MAKE PLAYLIST BROOO')
 
+
 class OriginDestination2(FlaskForm):
-    origin_playlist = SelectField('Origin', choices=[])
-    destination_playlist = SelectField('Destination', choices=['abc', 'scd'])
+    origin_playlist = SelectField('Origin', choices=[], validators=[DataRequired()])
+    destination_playlist = SelectField('Destination', choices=['abc', 'scd'], validators=[DataRequired()])
     submit = SubmitField('MAKE PLAYLIST BROOO')

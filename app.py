@@ -29,14 +29,21 @@ def home():
     return render_template('index.html', form=form)
 
 
-@app.route('/MyPlaylists')
+@app.route('/MyPlaylists', methods=['GET', 'POST'])
 def my_playlists():
     # playlists = [(playlist['name'], playlist['id']) for playlist in spotify.user_playlists(user=user)['items']]
-    playlists = [playlist['name'] for playlist in spotify.user_playlists(user=user)['items']]
+    playlists_dict = {}
+    for playlist in spotify.user_playlists(user=user)['items']:
+        playlists_dict[playlist['name']] = playlist['id']
+    playlists_names = [name for name, name_id in playlists_dict.items()]
     form = OriginDestination2()
-    form.destination_playlist.choices = playlists
-    form.origin_playlist.choices = playlists
-    # form.category.choices = playlists
-    return render_template('MyPlaylists.html', playlists=playlists, form=form)
+    form.destination_playlist.choices = playlists_names
+    form.origin_playlist.choices = playlists_names
+
+    if form.validate_on_submit():
+        create_new_playlist_from_not_mentioned_top_songs(spotify, playlists_dict[form.origin_playlist.data], playlists_dict[form.destination_playlist.data])
+    return render_template('MyPlaylists.html', playlists=playlists_names, form=form)
+
+
 if __name__ == '__main__':
     app.run(debug=True)

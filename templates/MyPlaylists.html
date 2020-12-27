@@ -1,11 +1,5 @@
 {% extends "base.html" %}
 {% block content %}
-    <ul class="list-group">
-    {% for item in playlists %}
-    <li class="list-group-item">{{ item[0] }}</li>
-    {% endfor %}
-    </ul>
-
     <form action="" method="post" novalidate>
         {{ form.hidden_tag() }}
         <p>
