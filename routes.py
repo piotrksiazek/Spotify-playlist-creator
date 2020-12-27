@@ -4,12 +4,16 @@ from spotipy.oauth2 import SpotifyOAuth
 import spotipy
 from config import Config
 from forms import OriginDestination, OriginDestination2
+from flask_bootstrap import Bootstrap
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
-from Playlist import Playlist
-from Track import Track
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates')
 app.config.from_object(Config)
+bootstrap = Bootstrap(app)
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 
 scope = config.scope
