@@ -12,7 +12,6 @@ user = config.user
 spotify = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
 
 
-
 def create_new_playlist_from_not_mentioned_top_songs(spot, old_playlist_id, new_playlist_id):
     # new_playlist_id = Playlist.get_id_of_newest_playlist(spotify)
     artists_from_old_playlist = Playlist.get_playlist_items(spot, old_playlist_id, 'artist', unique=True)
@@ -48,9 +47,9 @@ def create_new_playlist_from_not_mentioned_top_songs(spot, old_playlist_id, new_
 # print(spotify.track(id)['popularity'])
 
 # create_new_playlist_from_corresponding_random_tracks()
-# artist_id = 'spotify:artist:3Ya6VPgR8fqYmPsvA4Icpo'
-# top_track = spotify.artist_top_tracks(artist_id)['tracks'][0]['popularity']
-# print(top_track)
+artist_id = 'spotify:artist:3Ya6VPgR8fqYmPsvA4Icpo'
+top_track = spotify.artist_top_tracks(artist_id)['tracks'][0]['popularity']
+print(top_track)
 #
 # track_id = Track.get_the_least_popular_track_idd(spotify, artist_id, 100)
 # print(spotify.track(track_id)['name'])
