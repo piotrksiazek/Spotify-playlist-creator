@@ -25,7 +25,6 @@ from main import create_new_playlist_from_not_mentioned_top_songs
 @app.before_first_request
 def start_scheduler():
     scheduler.start()
-    print("pies")
 
 
 @app.shell_context_processor
