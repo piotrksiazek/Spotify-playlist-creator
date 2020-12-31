@@ -8,21 +8,13 @@ from app import app
 from app import models
 from app import db
 from app import scheduler
+from app import spotify, user, scope, my_uri
 from main import create_new_playlist_from_not_mentioned_top_songs
 
-# app = Flask(__name__, template_folder='templates')
-# app.config.from_object(Config)
-# bootstrap = Bootstrap(app)
-# db = SQLAlchemy(app)
-# migrate = Migrate(app, db)
-# login = LoginManager(app)
-# login.login_view = 'login'
-# scheduler = APScheduler()
-
-scope = config.scope
-my_uri = config.my_uri
-user = config.user
-spotify = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
+# scope = config.scope
+# my_uri = config.my_uri
+# user = config.user
+# spotify = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
 
 
 @app.before_first_request
