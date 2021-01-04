@@ -2,6 +2,7 @@ from flask import render_template, redirect, url_for, flash
 import config
 from spotipy.oauth2 import SpotifyOAuth
 import spotipy
+from app import routes_for_ajax_buttons
 from app.forms import OriginDestination, OriginDestination2, LoginForm, RegistrationForm
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app
@@ -25,7 +26,6 @@ def start_scheduler():
 @app.login_manager.user_loader
 def load_user(id):
     return models.User.query.get(int(id))
-
 
 @app.route('/logout')
 def logout():
