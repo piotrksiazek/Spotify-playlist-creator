@@ -93,5 +93,14 @@ class Playlist:
     def get_hipster_tracks(spotify: Spotify, artists_id_list: List[str], tracks_from_old_playlist: List[str]) -> List[str]:
         pass
 
+    @staticmethod
+    def is_playlist_name_unique(spotify: Spotify, playlist_name: str, user: str) -> bool:
+        playlists = spotify.user_playlists(user)['items']
+        for i in range(len(playlists)):
+            if playlists[i]['name'] == playlist_name:
+                return False
+        return True
+
+
 
 

@@ -47,9 +47,9 @@ def create_new_playlist_from_not_mentioned_top_songs(spot, old_playlist_id, new_
 # print(spotify.track(id)['popularity'])
 
 # create_new_playlist_from_corresponding_random_tracks()
-artist_id = 'spotify:artist:3Ya6VPgR8fqYmPsvA4Icpo'
-top_track = spotify.artist_top_tracks(artist_id)['tracks'][0]['popularity']
-print(top_track)
+# artist_id = 'spotify:artist:3Ya6VPgR8fqYmPsvA4Icpo'
+# top_track = spotify.artist_top_tracks(artist_id)['tracks'][0]['popularity']
+# print(top_track)
 #
 # track_id = Track.get_the_least_popular_track_idd(spotify, artist_id, 100)
 # print(spotify.track(track_id)['name'])
@@ -61,3 +61,4 @@ print(top_track)
 # track = Track.get_recommended_track(spotify, seed_tracks, 10)
 # name = spotify.track(track[0])['name']
 # print(name)
+Playlist.is_playlist_name_unique(spotify=spotify, playlist_name='x', user=user)

@@ -2,14 +2,14 @@ from flask import render_template, redirect, url_for, flash
 import config
 from spotipy.oauth2 import SpotifyOAuth
 import spotipy
-from app import routes_for_ajax_buttons
-from app.forms import OriginDestination, OriginDestination2, LoginForm, RegistrationForm
+from app.forms import OriginDestination, OriginDestination2, LoginForm, RegistrationForm, CreateNewPlaylist
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app
 from app import models
 from app import db
 from app import scheduler
 from app import spotify, user, scope, my_uri
+from Playlist import Playlist
 from main import create_new_playlist_from_not_mentioned_top_songs
 
 # scope = config.scope
@@ -65,11 +65,14 @@ def register():
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index')
 def index():
-    form = OriginDestination()
+    form = CreateNewPlaylist()
     if form.validate_on_submit():
-        original_playlist = form.origin_playlist.data
-        destination_playlist = form.destination_playlist.data
-        create_new_playlist_from_not_mentioned_top_songs(spotify, original_playlist, destination_playlist)
+        name = form.playlist_name.data
+        is_unique = Playlist.is_playlist_name_unique(spotify, name, user)
+        if is_unique:
+            Playlist.create_new_playlist(spotify=spotify, name=name, user=user)
+        else:
+            return render_template('index.html', form=form, is_unique=is_unique)
     return render_template('index.html', form=form)
 
 

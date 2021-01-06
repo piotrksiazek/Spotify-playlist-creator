@@ -1,11 +1,22 @@
 {% extends "base.html" %}
 {% block content %}
+<div class="container">
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ wtf.form_field(form.playlist_name) }}
+        </p>
 
-<input type=text size=5 name=name>
-<div class='container'>
-        <form>
-            <a href=# id=invoke><button class='btn btn-default'>Test</button></a>
-        </form>
-
+        {% if is_unique == False %}
+            <div>
+                <p>{{ wtf.form_field(form.submit) }}</p>
+                <p>Name must be unique</p>
+            </div>
+        {% else %}
+            <div>
+            <p>{{ wtf.form_field(form.submit) }}</p>
+            </div>
+        {% endif %}
+    </form>
 </div>
 {% endblock %}

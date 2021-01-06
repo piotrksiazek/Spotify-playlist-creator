@@ -16,6 +16,10 @@ class OriginDestination2(FlaskForm):
     submit = SubmitField('MAKE PLAYLIST BROOO')
 
 
+class CreateNewPlaylist(FlaskForm):
+    playlist_name = StringField('Playlist name', validators=[DataRequired()])
+    submit = SubmitField('Create playlist')
+
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
