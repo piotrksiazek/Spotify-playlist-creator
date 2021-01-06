@@ -61,4 +61,6 @@ def create_new_playlist_from_not_mentioned_top_songs(spot, old_playlist_id, new_
 # track = Track.get_recommended_track(spotify, seed_tracks, 10)
 # name = spotify.track(track[0])['name']
 # print(name)
-Playlist.is_playlist_name_unique(spotify=spotify, playlist_name='x', user=user)
+
+playlists = spotify.user_playlists('dianazabiegla')
+print(playlists['items'][0]['id'])

@@ -54,7 +54,7 @@ def register():
         return redirect(url_for('index'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        user_object = models.User(username=form.username.data, email=form.email.data)
+        user_object = models.User(username=form.username.data, email=form.email.data, spotify_id=form.spotify_id.data)
         user_object.set_password(form.password.data)
         db.session.add(user_object)
         db.session.commit()
@@ -65,7 +65,7 @@ def register():
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index')
 def index():
-
+    return render_template('index.html')
 
 @app.route('/my_items', methods=['GET', 'POST'])
 @login_required
@@ -80,20 +80,21 @@ def my_items():
             playlist = models.UserPlaylist(playlist_name=name, playlist_id=Playlist.get_playlist_id_with_name(spotify, name, user), user=current_user)
             db.session.add(playlist)
             db.session.commit()
-        else:
-            return render_template('index.html', form=form, is_unique=is_unique, up=user_playlists)
-    return render_template('index.html', form=form, up=user_playlists)
+        # return render_template('my_items.html', form=form, is_unique=is_unique, up=user_playlists)
+    return render_template('my_items.html', form=form, up=user_playlists)
 
 @app.route('/MyPlaylists', methods=['GET', 'POST'])
 @login_required
 def my_playlists():
     # playlists = [(playlist['name'], playlist['id']) for playlist in spotify.user_playlists(user=user)['items']]
+    current_user_hosted_playlists = models.UserPlaylist.query.filter_by(user_id=current_user.id).all()
     playlists_dict = {}
-    for playlist in spotify.user_playlists(user=user)['items']:
+    for playlist in spotify.user_playlists(current_user.spotify_id)['items']:
         playlists_dict[playlist['name']] = playlist['id']
     playlists_names = [name for name, name_id in playlists_dict.items()]
     form = OriginDestination2()
-    form.destination_playlist.choices = playlists_names
+    # User can only manipulate playlists that belong to him
+    form.destination_playlist.choices = [name for name, name_id in playlists_dict.items() if name in [u_name.playlist_name for u_name in current_user_hosted_playlists]]
     form.origin_playlist.choices = playlists_names
 
     if form.validate_on_submit():

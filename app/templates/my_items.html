@@ -1,10 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ wtf.form_field(form.playlist_name) }}
+        </p>
 
-</body>
-</html>
+        {% if is_unique == False %}
+            <div>
+                <p>{{ wtf.form_field(form.submit) }}</p>
+                <p>Name must be unique</p>
+            </div>
+        {% else %}
+            <div>
+            <p>{{ wtf.form_field(form.submit) }}</p>
+            </div>
+        {% endif %}
+    </form>
+{% for p in up %}
+<p>{{ p.playlist_name }}</p>
+{% endfor %}
+</div>
+{% endblock %}
