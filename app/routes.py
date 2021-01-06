@@ -94,7 +94,7 @@ def my_playlists():
     playlists_names = [name for name, name_id in playlists_dict.items()]
     form = OriginDestination2()
     # User can only manipulate playlists that belong to him
-    form.destination_playlist.choices = [name for name, name_id in playlists_dict.items() if name in [u_name.playlist_name for u_name in current_user_hosted_playlists]]
+    form.destination_playlist.choices = [playlist.playlist_name for playlist in current_user_hosted_playlists if playlist.user_id == current_user.id]
     form.origin_playlist.choices = playlists_names
 
     if form.validate_on_submit():
