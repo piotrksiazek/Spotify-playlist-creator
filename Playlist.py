@@ -68,14 +68,18 @@ class Playlist:
         track_list = []
         for artist_index, artist_id in enumerate(artists_id_list):
             while True:
-                albums = spotify.artist_albums(artist_id)['items']
-                number_of_albums = len(albums)
-                random_album_index = random.randint(0, number_of_albums - 1)
-                random_album_id = albums[random_album_index]['id']
-                random_album = spotify.album_tracks(random_album_id)['items']
-                number_of_tracks = len(random_album)
-                random_track_index = random.randint(0, number_of_tracks - 1)
-                random_track_id = random_album[random_track_index]['id']
+                try:
+                    albums = spotify.artist_albums(artist_id)['items']
+                    number_of_albums = len(albums)
+                    random_album_index = random.randint(0, number_of_albums - 1)
+                    random_album_id = albums[random_album_index]['id']
+                    random_album = spotify.album_tracks(random_album_id)['items']
+                    number_of_tracks = len(random_album)
+                    random_track_index = random.randint(0, number_of_tracks - 1)
+                    random_track_id = random_album[random_track_index]['id']
+                except ValueError:
+                    #just in case empty range for randrange() (0, 0, 0)
+                    break
 
                 if random_track_id in tracks_from_old_playlist:  # We didn't find anything new
                     continue

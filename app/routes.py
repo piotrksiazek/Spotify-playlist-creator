@@ -86,7 +86,6 @@ def my_items():
 @app.route('/MyPlaylists', methods=['GET', 'POST'])
 @login_required
 def my_playlists():
-    # playlists = [(playlist['name'], playlist['id']) for playlist in spotify.user_playlists(user=user)['items']]
     current_user_hosted_playlists = models.UserPlaylist.query.filter_by(user_id=current_user.id).all()
     playlists_dict = {}
     for playlist in spotify.user_playlists(current_user.spotify_id)['items']:
@@ -98,10 +97,12 @@ def my_playlists():
     form.origin_playlist.choices = playlists_names
 
     if form.validate_on_submit():
-        scheduler.add_job(id='scheduled_task',
-                              func=lambda : create_new_playlist_from_not_mentioned_top_songs(spotify, playlists_dict[form.origin_playlist.data],
-                                                                                         playlists_dict[form.destination_playlist.data]), trigger='interval', seconds=8)
-        # create_new_playlist_from_not_mentioned_top_songs(spotify, playlists_dict[form.origin_playlist.data], playlists_dict[form.destination_playlist.data])
+        playlists_dict[form.destination_playlist.data] = Playlist.get_playlist_id_with_name(spotify, form.destination_playlist.data, user)
+        # scheduler.add_job(id='scheduled_task',
+        #                       func=lambda : create_new_playlist_from_not_mentioned_top_songs(spotify, playlists_dict[form.origin_playlist.data],
+        #                     playlists_dict[form.destination_playlist.data]), trigger='interval', seconds=8)
+        create_new_playlist_from_not_mentioned_top_songs(spotify, playlists_dict[form.origin_playlist.data],
+                                                         playlists_dict[form.destination_playlist.data])
     return render_template('MyPlaylists.html', playlists=playlists_names, form=form)
 
 
