@@ -65,16 +65,24 @@ def register():
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index')
 def index():
+
+
+@app.route('/my_items', methods=['GET', 'POST'])
+@login_required
+def my_items():
     form = CreateNewPlaylist()
+    user_playlists = models.UserPlaylist.query.filter_by(user_id=current_user.id).all()
     if form.validate_on_submit():
         name = form.playlist_name.data
         is_unique = Playlist.is_playlist_name_unique(spotify, name, user)
         if is_unique:
             Playlist.create_new_playlist(spotify=spotify, name=name, user=user)
+            playlist = models.UserPlaylist(playlist_name=name, playlist_id=Playlist.get_playlist_id_with_name(spotify, name, user), user=current_user)
+            db.session.add(playlist)
+            db.session.commit()
         else:
-            return render_template('index.html', form=form, is_unique=is_unique)
-    return render_template('index.html', form=form)
-
+            return render_template('index.html', form=form, is_unique=is_unique, up=user_playlists)
+    return render_template('index.html', form=form, up=user_playlists)
 
 @app.route('/MyPlaylists', methods=['GET', 'POST'])
 @login_required

@@ -101,6 +101,13 @@ class Playlist:
                 return False
         return True
 
+    @staticmethod
+    def get_playlist_id_with_name(spotify: Spotify, playlist_name: str, user: str) -> str:
+        playlists = spotify.user_playlists(user)['items']
+        for i in range(len(playlists)):
+            if playlists[i]['name'] == playlist_name:
+                return playlists[i]['id']
+
 
 
 

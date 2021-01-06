@@ -18,5 +18,8 @@
             </div>
         {% endif %}
     </form>
+{% for p in up %}
+<p>{{ p.playlist_name }}</p>
+{% endfor %}
 </div>
 {% endblock %}
