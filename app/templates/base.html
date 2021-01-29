@@ -1,4 +1,4 @@
-{% extends "bootstrap/base.html" %}
+{#{% extends "bootstrap/base.html" %}#}
 {% import "bootstrap/wtf.html" as wtf%}
 {% block head %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -42,9 +42,12 @@
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href={{ url_for('index') }}>Home</a>
             </li>
+          </li>
+          {% if current_user.is_authenticated %}
             <li class="nav-item">
-              <a class="nav-link" href={{ url_for('my_playlists') }}>My playlists</a>
-            </li>
+              <a class="nav-link" href={{ url_for('actions') }}>Actions</a>
+          </li>
+          {% endif %}
               {% if not current_user.is_authenticated %}
             <li class="nav-item">
               <a class="nav-link" href={{ url_for('login') }}>Login</a>
@@ -57,12 +60,11 @@
               <a class="nav-link" href={{ url_for('my_items') }}>My Items</a>
             </li>
               {% endif %}
+          {% if not current_user.is_authenticated %}
             <li class="nav-item">
-              <a class="nav-link" href={{ url_for('register') }}>New User</a>
+              <a class="nav-link" href={{ url_for('register') }}>Register</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-            </li>
+          {% endif %}
           </ul>
         </div>
       </div>

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container">
+<div style="margin:auto; width:40%">
     <form action="" method="post" novalidate>
         {{ form.hidden_tag() }}
         <p>
@@ -9,7 +9,9 @@
         <p>
             {{ wtf.form_field(form.destination_playlist) }}
         </p>
-        <p>{{ wtf.form_field(form.submit) }}</p>
+        <div class="container">
+        <p class="btn effect01" target="_blank">{{ wtf.form_field(form.submit) }}</p>
+        </div>
     </form>
 </div>
 {% endblock %}

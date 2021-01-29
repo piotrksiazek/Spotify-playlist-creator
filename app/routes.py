@@ -83,9 +83,9 @@ def my_items():
         # return render_template('my_items.html', form=form, is_unique=is_unique, up=user_playlists)
     return render_template('my_items.html', form=form, up=user_playlists)
 
-@app.route('/MyPlaylists', methods=['GET', 'POST'])
+@app.route('/mirror', methods=['GET', 'POST'])
 @login_required
-def my_playlists():
+def mirror():
     current_user_hosted_playlists = models.UserPlaylist.query.filter_by(user_id=current_user.id).all()
     playlists_dict = {}
     for playlist in spotify.user_playlists(current_user.spotify_id)['items']:
@@ -103,8 +103,12 @@ def my_playlists():
         #                     playlists_dict[form.destination_playlist.data]), trigger='interval', seconds=8)
         create_new_playlist_from_not_mentioned_top_songs(spotify, playlists_dict[form.origin_playlist.data],
                                                          playlists_dict[form.destination_playlist.data])
-    return render_template('MyPlaylists.html', playlists=playlists_names, form=form)
+    return render_template('mirror.html', playlists=playlists_names, form=form)
 
+@app.route('/actions')
+@login_required
+def actions():
+    return render_template('Actions.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

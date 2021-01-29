@@ -13,7 +13,7 @@ class OriginDestination(FlaskForm):
 class OriginDestination2(FlaskForm):
     origin_playlist = SelectField('Origin', choices=[], validators=[DataRequired()])
     destination_playlist = SelectField('Destination', choices=['abc', 'scd'], validators=[DataRequired()])
-    submit = SubmitField('MAKE PLAYLIST BROOO')
+    submit = SubmitField('Go')
 
 
 class CreateNewPlaylist(FlaskForm):
