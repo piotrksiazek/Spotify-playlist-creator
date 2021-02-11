@@ -12,14 +12,30 @@
                 <p>{{ wtf.form_field(form.submit) }}</p>
                 <p>Name must be unique</p>
             </div>
+        {% elif number_of_user_playlists > 3%}
+            <div>
+                <p>{{ wtf.form_field(form.submit) }}</p>
+                <p>User can own up to 3 playlists</p>
+            </div>
         {% else %}
             <div>
             <p>{{ wtf.form_field(form.submit) }}</p>
             </div>
         {% endif %}
     </form>
-{% for p in up %}
-<p class="list-group-item">{{ p.playlist_name }}</p>
-{% endfor %}
+
+    <form action="" method="post" novalidate>
+        {{ delete_form.hidden_tag() }}
+        <p>
+            {{ wtf.form_field(delete_form.user_playlist) }}
+        </p>
+
+        <div>
+        <p>{{ wtf.form_field(delete_form.submit) }}</p>
+        </div>
+    </form>
+{#{% for p in up %}#}
+{#<p class="list-group-item">{{ p.playlist_name }}</p>#}
+{#{% endfor %}#}
 </div>
 {% endblock %}

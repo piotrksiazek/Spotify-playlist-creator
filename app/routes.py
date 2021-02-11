@@ -74,21 +74,22 @@ def my_items():
     create_form = CreateNewPlaylist()
     delete_form = DeleteUserPlaylist()
     delete_form.user_playlist.choices = [playlist.playlist_name for playlist in user_playlists if playlist.user_id == current_user.id]
-
+    is_unique = True
+    number_of_user_playlists = 0
     if create_form.validate_on_submit():
         name = create_form.playlist_name.data
         is_unique = Playlist.is_playlist_name_unique(spotify, name, user)
+        number_of_user_playlists = len(user_playlists)
         if is_unique and len(user_playlists) <= 3:
             Playlist.create_new_playlist(spotify=spotify, name=name, user=user)
             playlist = models.UserPlaylist(playlist_name=name, playlist_id=Playlist.get_playlist_id_with_name(spotify, name, user), user=current_user)
             db.session.add(playlist)
             db.session.commit()
-        # return render_template('my_items.html', form=form, is_unique=is_unique, up=user_playlists)
 
     if delete_form.validate_on_submit():
         playlist_to_clear = models.UserPlaylist.query.filter_by(playlist_name=delete_form.user_playlist.data).first().playlist_id
         Playlist.clear_playlist(spotify=spotify, playlist_id=playlist_to_clear, user=user)
-    return render_template('my_items.html', form=create_form, up=user_playlists, delete_form=delete_form)
+    return render_template('my_items.html', form=create_form, up=user_playlists, delete_form=delete_form, is_unique=is_unique, number_of_user_playlists=number_of_user_playlists)
 
 
 @app.route('/mirror', methods=['GET', 'POST'])
