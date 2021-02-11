@@ -1,5 +1,6 @@
 from spotipy import Spotify
 from typing import List
+import random
 
 class Track:
     @staticmethod
@@ -56,3 +57,10 @@ class Track:
                 duplicates.append(the_least_popular_track)
         print(duplicates)
         return the_least_popular_track
+
+    @staticmethod
+    def get_random_track_id_from_album(spotify: Spotify, album_id: str):
+        items = spotify.album_tracks(album_id)['items']
+        number_of_tracks = len(items)
+        track_index = random.randint(0, number_of_tracks-1)
+        return items[track_index]['id']

@@ -1,10 +1,13 @@
 from typing import List
 from spotipy import Spotify
 import random
+from Track import Track
 
 
 class Playlist:
-
+    """
+    Wrapper class for methods related to playlists.
+    """
     @staticmethod
     def get_playlist_items(spotify: Spotify, playlist_id: str, type_of_item: str, unique: bool) -> List[str]:
         """
@@ -31,7 +34,7 @@ class Playlist:
     def get_id_of_newest_playlist(spotify: Spotify) -> str:
         """
         :param spotify: spotipy.Spotify class instance
-        :returns: if of the most recently created playlist
+        :returns: id of the most recently created playlist on account
         """
         new_playlist = spotify.current_user_playlists(limit=1, offset=0)
         return new_playlist['items'][0]['id']
@@ -90,7 +93,13 @@ class Playlist:
 
     @staticmethod
     def create_new_playlist(spotify: Spotify, name: str, user: str):
-        """Just a wrapper around already existing spotipy function"""
+        """
+        Just a wrapper around already existing spotipy function. Creates new playlist with a given name.
+        :param spotify: spotipy.Spotify class instance
+        :param name: name of the playlist to be created
+        :param user: spotify user id
+        :returns: None
+        """
         spotify.user_playlist_create(user=user, name=name)
 
     @staticmethod
@@ -99,6 +108,12 @@ class Playlist:
 
     @staticmethod
     def is_playlist_name_unique(spotify: Spotify, playlist_name: str, user: str) -> bool:
+        """
+        :param spotify: spotipy.Spotify class instance
+        :param playlist_name: Playlist name in human readable format, not id
+        :param user: spotify user id
+        :returns: True if playlist name is unique for the user and False if not unique.
+        """
         playlists = spotify.user_playlists(user)['items']
         for i in range(len(playlists)):
             if playlists[i]['name'] == playlist_name:
@@ -107,11 +122,33 @@ class Playlist:
 
     @staticmethod
     def get_playlist_id_with_name(spotify: Spotify, playlist_name: str, user: str) -> str:
+        """
+        :param spotify: spotipy.Spotify class instance
+        :param playlist_name: Playlist name in human readable format, not id
+        :param user: spotify user id
+        :returns: playlist id corresponding with param playlist_name if found, None if not.
+        """
         playlists = spotify.user_playlists(user)['items']
         for i in range(len(playlists)):
             if playlists[i]['name'] == playlist_name:
                 return playlists[i]['id']
 
+    @staticmethod
+    def get_random_track_from_each_album(spotify: Spotify, artist_id: str, include_singles=False) -> List[str]:
+        """
+        :param spotify: spotipy.Spotify class instance
+        :param artist_id: desired artists id
+        :param include_singles: if True albums of type single will be considered, False by default
+        :returns: List with one random track id for each album from given artist
+        """
+        items = spotify.artist_albums(artist_id)['items']
+        if include_singles:
+            albums_ids = [track['id'] for track in items]
+        else:
+            albums_ids = [track['id'] for track in items if track['album_type'] != 'single']
+        random_track_ids = []
+        for album_id in albums_ids:
+            random_track_id = Track.get_random_track_id_from_album(spotify, album_id)
+            random_track_ids.append(random_track_id)
 
-
-
+        return list(set(random_track_ids))

@@ -62,5 +62,6 @@ def create_new_playlist_from_not_mentioned_top_songs(spot, old_playlist_id, new_
 # name = spotify.track(track[0])['name']
 # print(name)
 
-playlists = spotify.user_playlists('dianazabiegla')
-print(playlists['items'][0]['id'])
+print(Playlist.get_random_track_from_each_album(spotify=spotify, artist_id="spotify:artist:3vWL2MmOBNpJAP2tw1TLQw"))
+
+# print(Track.get_random_track_id_from_album(spotify=spotify, album_id='spotify:album:48XbS5emhKTYTw7YAiqUKL'))
