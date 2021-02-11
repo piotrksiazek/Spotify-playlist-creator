@@ -18,7 +18,11 @@ class OriginDestination2(FlaskForm):
 
 class CreateNewPlaylist(FlaskForm):
     playlist_name = StringField('Playlist name', validators=[DataRequired()])
-    submit = SubmitField('Create playlist')
+    submit = SubmitField('Create')
+
+class DeleteUserPlaylist(FlaskForm):
+    user_playlist = SelectField('Origin', choices=[], validators=[DataRequired()])
+    submit = SubmitField('Delete')
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])

@@ -152,3 +152,9 @@ class Playlist:
             random_track_ids.append(random_track_id)
 
         return list(set(random_track_ids))
+
+    @staticmethod
+    def clear_playlist(spotify: Spotify, playlist_id: str, user: str) -> None:
+        playlist_items = spotify.playlist_items(playlist_id)['items']
+        track_ids = [item['track']['id'] for item in playlist_items]
+        spotify.user_playlist_remove_all_occurrences_of_tracks(user, playlist_id, track_ids)
