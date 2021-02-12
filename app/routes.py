@@ -2,7 +2,7 @@ from flask import render_template, redirect, url_for, flash
 import config
 from spotipy.oauth2 import SpotifyOAuth
 import spotipy
-from app.forms import OriginDestination, OriginDestination2, LoginForm, RegistrationForm, CreateNewPlaylist, DeleteUserPlaylist
+from app.forms import OriginDestination, OriginDestination2, LoginForm, RegistrationForm, CreateNewPlaylist, DeleteUserPlaylist, TrackId
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app
 from app import models
@@ -10,6 +10,7 @@ from app import db
 from app import scheduler
 from app import spotify, user, scope, my_uri
 from Playlist import Playlist
+from Track import Track
 from main import create_new_playlist_from_not_mentioned_top_songs
 
 # scope = config.scope
@@ -130,6 +131,17 @@ def one_album_one_track():
             error_message = "Wrong ID, maybe you pasted track id instead of artist id?"
 
     return render_template('one_album_one_track.html', form=form, error_message=error_message)
+
+@app.route('/all_about_that_track', methods=['GET', 'POST'])
+@login_required
+def all_about_that_track():
+    form = TrackId()
+    audio_features = {}
+    track = ""
+    if form.validate_on_submit():
+        audio_features = Track.get_audio_features(spotify, form.track_id.data)
+        track = Track.get_track_info(spotify, form.track_id.data)
+    return render_template('all_about_that_track.html', form=form, audio_features=audio_features, track=track)
 
 @app.route('/actions')
 @login_required

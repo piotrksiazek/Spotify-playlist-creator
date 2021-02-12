@@ -64,3 +64,17 @@ class Track:
         number_of_tracks = len(items)
         track_index = random.randint(0, number_of_tracks-1)
         return items[track_index]['id']
+
+    @staticmethod
+    def get_audio_features(spotify: Spotify, track_id: str) -> dict:
+        return spotify.audio_features([track_id])[0]
+
+    @staticmethod
+    def get_track_info(spotify: Spotify, track_id: str) -> dict:
+        result = {}
+        track = spotify.track(track_id)
+        result['artist'] = track['artists'][0]['name']
+        result['name'] = track['name']
+        result['image'] = track['album']['images'][1]['url']
+        return result
+

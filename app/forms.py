@@ -4,6 +4,11 @@ from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from app.models import User
 
 
+class TrackId(FlaskForm):
+    track_id = StringField('Track ID', validators=[DataRequired()])
+    submit = SubmitField('Get info')
+
+
 class OriginDestination(FlaskForm):
     artist = StringField('Artist', validators=[DataRequired()])
     destination_playlist = SelectField('Playlist name', choices=[], validators=[DataRequired()])

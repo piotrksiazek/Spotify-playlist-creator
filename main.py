@@ -65,4 +65,11 @@ def create_new_playlist_from_not_mentioned_top_songs(spot, old_playlist_id, new_
 # print(spotify.playlist_items('spotify:playlist:0hCXmoLAFhxr2XI2RwEdg8')['items'][0]['track']['id'])
 
 # print(Track.get_random_track_id_from_album(spotify=spotify, album_id='spotify:album:48XbS5emhKTYTw7YAiqUKL'))
-Playlist.clear_playlist(spotify, "spotify:playlist:1tPbu63UdAHOdohoguT3zZ", user)
+# track = Track.get_info_about_track(spotify, 'spotify:track:63PEsIWyy3QgiPy4u5I9pG')
+# for key, value in track.items():
+#     print(key)
+#     print(value)
+#     print("\n\n--------------------------------------------------------------------------------\n\n")
+track = spotify.track("spotify:track:6y6GFyjVFwWI7lJbbbF0hU")
+# print(track)
+print(track['album']['images'][1]['url'])

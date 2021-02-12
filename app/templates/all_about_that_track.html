@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="containter narrow">
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ wtf.form_field(form.track_id) }}
+        </p>
+        <div class="container">
+        <p>{{ wtf.form_field(form.submit) }}</p>
+        </div>
+    </form>
+</div>
+{% if track %}
+    <h1 class="centered"> {{ track['name']}} by {{ track['artist']}}</h1>
+    <img src="{{ track['image'] }}" class="img-center">
+{% endif %}
+{% if audio_features %}
+    <div class="ct-chart ct-perfect-fourth container horizontal-chart"></div>
+{% endif %}
+{#    audio features chart#}
+    <script>
+        new Chartist.Bar('.ct-chart', {
+          labels: ['energy', 'speechiness', 'acousticness', 'instrumentalness', 'liveness', 'valence'],
+          series: [
+            [{{ audio_features['energy'] }}, {{ audio_features['speechiness'] }}, {{ audio_features['acousticness'] }},
+                {{ audio_features['instrumentalness'] }}, {{ audio_features['liveness'] }}, {{ audio_features['valence'] }}]
+          ]
+        }, {
+          seriesBarDistance: 10,
+          reverseData: true,
+          horizontalBars: true,
+          axisY: {
+            offset: 70
+          }
+        });
+
+    </script>
+{% endblock %}
