@@ -120,11 +120,16 @@ def one_album_one_track():
     user_playlists = models.UserPlaylist.query.filter_by(user_id=current_user.id).all()
     form = OriginDestination()
     form.destination_playlist.choices = [user_playlist.playlist_name for user_playlist in user_playlists if user_playlist.user_id == current_user.id]
+    error_message = ""
     if form.validate_on_submit():
-        track_ids = Playlist.get_random_track_from_each_album(spotify, form.artist.data)
-        playlist_id = models.UserPlaylist.query.filter_by(playlist_name=form.destination_playlist.data).first().playlist_id
-        spotify.playlist_add_items(playlist_id, track_ids)
-    return render_template('one_album_one_track.html', form=form)
+        try:
+            track_ids = Playlist.get_random_track_from_each_album(spotify, form.artist.data)
+            playlist_id = models.UserPlaylist.query.filter_by(playlist_name=form.destination_playlist.data).first().playlist_id
+            spotify.playlist_add_items(playlist_id, track_ids)
+        except spotipy.exceptions.SpotifyException:
+            error_message = "Wrong ID, maybe you pasted track id instead of artist id?"
+
+    return render_template('one_album_one_track.html', form=form, error_message=error_message)
 
 @app.route('/actions')
 @login_required

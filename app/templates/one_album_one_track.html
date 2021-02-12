@@ -11,6 +11,9 @@
         </p>
         <div class="container">
         <p class="btn effect01" target="_blank">{{ wtf.form_field(form.submit) }}</p>
+            {% if error_message %}
+                <p>{{error_message}}</p>
+            {% endif %}
         </div>
     </form>
 </div>
