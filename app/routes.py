@@ -114,6 +114,18 @@ def mirror():
                                                          playlists_dict[form.destination_playlist.data])
     return render_template('mirror.html', playlists=playlists_names, form=form)
 
+@app.route('/one_album_one_track', methods=['GET', 'POST'])
+@login_required
+def one_album_one_track():
+    user_playlists = models.UserPlaylist.query.filter_by(user_id=current_user.id).all()
+    form = OriginDestination()
+    form.destination_playlist.choices = [user_playlist.playlist_name for user_playlist in user_playlists if user_playlist.user_id == current_user.id]
+    if form.validate_on_submit():
+        track_ids = Playlist.get_random_track_from_each_album(spotify, form.artist.data)
+        playlist_id = models.UserPlaylist.query.filter_by(playlist_name=form.destination_playlist.data).first().playlist_id
+        spotify.playlist_add_items(playlist_id, track_ids)
+    return render_template('one_album_one_track.html', form=form)
+
 @app.route('/actions')
 @login_required
 def actions():

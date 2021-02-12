@@ -2,8 +2,8 @@
 {% block content %}
 <div class="container text-center bg row">
 
-    <a href="#" class="btn btn-primary centered top-buffer col-xs-12" data-toggle="tooltip" title="Takes each track from given playlist and replaces it with the least popular track from the same artist.">XD</a>
-    <a href="#" class="btn btn-primary centered top-buffer col-xs-12" data-toggle="tooltip" title="Creates playlist that contains one random track from every album from given aritst.">SD</a>
+    <a href="{{url_for('mirror')}}" class="btn btn-primary centered top-buffer col-xs-12" data-toggle="tooltip" title="Takes each track from given playlist and replaces it with the least popular track from the same artist.">Mirror playlist</a>
+    <a href="{{ url_for('one_album_one_track') }}" class="btn btn-primary centered top-buffer col-xs-12" data-toggle="tooltip" title="Creates playlist that contains one random track from every album from given aritst.">One track for one album</a>
     <a href="#" class="btn btn-primary centered top-buffer col-xs-12">ZX</a>
 
 </div>

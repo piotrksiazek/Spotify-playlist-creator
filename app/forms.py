@@ -5,9 +5,9 @@ from app.models import User
 
 
 class OriginDestination(FlaskForm):
-    origin_playlist = StringField('Origin', validators=[DataRequired()])
-    destination_playlist = PasswordField('Destination', validators=[DataRequired()])
-    submit = SubmitField('MAKE PLAYLIST BROOO')
+    artist = StringField('Artist', validators=[DataRequired()])
+    destination_playlist = SelectField('Playlist name', choices=[], validators=[DataRequired()])
+    submit = SubmitField('Create')
 
 
 class OriginDestination2(FlaskForm):
