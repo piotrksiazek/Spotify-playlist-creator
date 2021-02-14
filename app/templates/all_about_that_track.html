@@ -13,7 +13,7 @@
 </div>
 {% if track %}
     <h1 class="centered"> {{ track['name']}} by {{ track['artist']}}</h1>
-    <img src="{{ track['image'] }}" class="img-center">
+    <iframe class="img-center" src="https://open.spotify.com/embed/track/{{ track['id'] }}" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
 {% endif %}
 {% if audio_features %}
     <div class="ct-chart ct-perfect-fourth container horizontal-chart"></div>

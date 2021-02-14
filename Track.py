@@ -76,5 +76,6 @@ class Track:
         result['artist'] = track['artists'][0]['name']
         result['name'] = track['name']
         result['image'] = track['album']['images'][1]['url']
+        result['id'] = track['id']
         return result
 
