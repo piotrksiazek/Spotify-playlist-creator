@@ -1,6 +1,8 @@
 from spotipy import Spotify
 from typing import List
 import random
+import requests
+import json
 
 class Track:
     @staticmethod
@@ -70,6 +72,14 @@ class Track:
         return spotify.audio_features([track_id])[0]
 
     @staticmethod
+    def get_lyrics(artist: str, track_name: str) -> str:
+        url = 'https://api.lyrics.ovh/v1/' + artist + '/' + track_name
+        response = requests.get(url)
+        json_data = json.loads(response.content)
+        lyrics = json_data['lyrics']
+        return lyrics
+
+    @staticmethod
     def get_track_info(spotify: Spotify, track_id: str) -> dict:
         result = {}
         track = spotify.track(track_id)
@@ -77,5 +87,11 @@ class Track:
         result['name'] = track['name']
         result['image'] = track['album']['images'][1]['url']
         result['id'] = track['id']
+        try:
+            result['lyrics'] = Track.get_lyrics(result['artist'], result['name'])
+        except json.decoder.JSONDecodeError:
+            result['lyrics'] = 'Lyrics not found.'
+        if not result['lyrics']:
+            result['lyrics'] = 'Lyrics not found.'
         return result
 

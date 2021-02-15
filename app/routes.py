@@ -138,6 +138,7 @@ def all_about_that_track():
     form = TrackId()
     audio_features = {}
     track = ""
+    lyrics = ""
     if form.validate_on_submit():
         audio_features = Track.get_audio_features(spotify, form.track_id.data)
         track = Track.get_track_info(spotify, form.track_id.data)

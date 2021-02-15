@@ -16,7 +16,13 @@
     <iframe class="img-center" src="https://open.spotify.com/embed/track/{{ track['id'] }}" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
 {% endif %}
 {% if audio_features %}
+    <div><p class="text-center" id="audio-features">Audio features</p></div>
     <div class="ct-chart ct-perfect-fourth container horizontal-chart"></div>
+{% endif %}
+{% if  track['lyrics']%}
+    {% for verse in track['lyrics'].split('\n') %}
+    <ul class="text-center">{{ verse }}</ul>
+    {% endfor %}
 {% endif %}
 {#    audio features chart#}
     <script>
