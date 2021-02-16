@@ -77,16 +77,52 @@ class Track:
         response = requests.get(url)
         json_data = json.loads(response.content)
         lyrics = json_data['lyrics']
+        if not lyrics:
+            lyrics = "Lyrics not found."
         return lyrics
+
+    @staticmethod
+    def get_discography_audiodb(artist: str) -> List[dict]:
+        url = 'http://theaudiodb.com/api/v1/json/1/discography.php?s=' + artist
+        response = requests.get(url)
+        json_data = json.loads(response.content)
+        return json_data['album']
+
+    @staticmethod
+    def get_artist_info_audiodb(artist: str) -> dict:
+        result = {}
+        url = 'http://theaudiodb.com/api/v1/json/1/search.php?s=' + artist
+        response = requests.get(url)
+        json_data = json.loads(response.content)['artists'][0]
+        result['genre'] = json_data['strGenre']
+        result['style'] = json_data['strStyle']
+        result['formed_year'] = json_data['intFormedYear']
+        result['artist banner'] = json_data['strArtistBanner']
+        result['artist_bio'] = json_data['strBiographyEN']
+        result['mood'] = json_data['strMood']
+        result['website'] = json_data['strWebsite']
+        result['facebook'] = json_data['strFacebook']
+        result['twitter'] = json_data['strTwitter']
+        result['number of members'] = json_data['intMembers']
+        result['country'] = json_data['strCountry']
+        result['discography'] = Track.get_discography_audiodb(artist)
+        return result
 
     @staticmethod
     def get_track_info(spotify: Spotify, track_id: str) -> dict:
         result = {}
         track = spotify.track(track_id)
+        milliseconds = track['duration_ms']
+        seconds = int((milliseconds/1000)%60)
+        minutes = int((milliseconds / (1000 * 60)) % 60)
         result['artist'] = track['artists'][0]['name']
         result['name'] = track['name']
         result['image'] = track['album']['images'][1]['url']
         result['id'] = track['id']
+        result['duration'] = {'minutes': minutes, 'seconds': seconds}
+        result['popularity'] = track['popularity']
+        result['release_date'] = track['album']['release_date']
+        result['explicit'] = track['explicit']
         try:
             result['lyrics'] = Track.get_lyrics(result['artist'], result['name'])
         except json.decoder.JSONDecodeError:

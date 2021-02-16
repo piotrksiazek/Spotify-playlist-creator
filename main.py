@@ -72,4 +72,4 @@ def create_new_playlist_from_not_mentioned_top_songs(spot, old_playlist_id, new_
 #     print("\n\n--------------------------------------------------------------------------------\n\n")
 track = spotify.track("spotify:track:6y6GFyjVFwWI7lJbbbF0hU")
 # print(track)
-print(track['album']['images'][1]['url'])
+print(track['explicit'])

@@ -35,10 +35,18 @@
     h1{
         text-align: center;
     }
+    .margin-auto{
+        margin: auto;
+    }
     .img-center{
       display: block;
       margin-left: auto;
       margin-right: auto;
+    }
+    .toggle-down-bar{
+        display:block;
+        margin:auto;
+        width: 20%;
     }
     #audio-features{
         padding: 20px;
@@ -61,6 +69,15 @@
     #submit:hover{
         background-color: #f0ad4e;
     }
+    #artistbio{
+        padding-left: 150px;
+        padding-right: 150px;
+        text-align: justify;
+    }
+    #artistinfo{
+        white-space: pre;
+    }
+
     .narrow{
         margin: auto;
         width: 40%;
@@ -68,6 +85,9 @@
     .horizontal-chart{
         height: 50%;
         width: 50%;
+    }
+    #panel{
+        display: none;
     }
 
   {#  .navbar-custom {#}
@@ -144,5 +164,13 @@
         }
       })
     });
+</script>
+{#Jquery toggle div#}
+<script>
+$(document).ready(function(){
+  $("#flip").click(function(){
+    $("#panel").slideToggle("fast");
+  });
+});
 </script>
 </body>

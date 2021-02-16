@@ -90,7 +90,8 @@ def my_items():
     if delete_form.validate_on_submit():
         playlist_to_clear = models.UserPlaylist.query.filter_by(playlist_name=delete_form.user_playlist.data).first().playlist_id
         Playlist.clear_playlist(spotify=spotify, playlist_id=playlist_to_clear, user=user)
-    return render_template('my_items.html', form=create_form, up=user_playlists, delete_form=delete_form, is_unique=is_unique, number_of_user_playlists=number_of_user_playlists)
+    return render_template('my_items.html', form=create_form, up=user_playlists, delete_form=delete_form,
+                           is_unique=is_unique, number_of_user_playlists=number_of_user_playlists)
 
 
 @app.route('/mirror', methods=['GET', 'POST'])
@@ -137,12 +138,23 @@ def one_album_one_track():
 def all_about_that_track():
     form = TrackId()
     audio_features = {}
-    track = ""
-    lyrics = ""
+    track = {}
+    artist = {}
+    error_message = ""
+    audiodb_error = ""
     if form.validate_on_submit():
-        audio_features = Track.get_audio_features(spotify, form.track_id.data)
-        track = Track.get_track_info(spotify, form.track_id.data)
-    return render_template('all_about_that_track.html', form=form, audio_features=audio_features, track=track)
+        try:
+            audio_features = Track.get_audio_features(spotify, form.track_id.data)
+            track = Track.get_track_info(spotify, form.track_id.data)
+            try:
+                artist = Track.get_artist_info_audiodb(track['artist'])
+            except TypeError:
+                audiodb_error = "Couldn't find more complex data about artist."
+        except spotipy.exceptions.SpotifyException:
+            error_message = "Wrong ID"
+    return render_template('all_about_that_track.html',
+                           form=form, audio_features=audio_features, track=track, artist=artist,
+                           error_message=error_message, audiodb_error=audiodb_error)
 
 @app.route('/actions')
 @login_required

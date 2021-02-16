@@ -6,40 +6,79 @@
         <p>
             {{ wtf.form_field(form.track_id) }}
         </p>
-        <div class="container">
-        <p>{{ wtf.form_field(form.submit) }}</p>
-        </div>
+    <div class="container">
+        <p>{{ wtf.form_field(form.submit) }}  {% if error_message %} Wrong ID {% endif %}</p>
+    </div>
     </form>
 </div>
+
 {% if track %}
     <h1 class="centered"> {{ track['name']}} by {{ track['artist']}}</h1>
     <iframe class="img-center" src="https://open.spotify.com/embed/track/{{ track['id'] }}" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
 {% endif %}
+
 {% if audio_features %}
-    <div><p class="text-center" id="audio-features">Audio features</p></div>
     <div class="ct-chart ct-perfect-fourth container horizontal-chart"></div>
 {% endif %}
+
 {% if  track['lyrics']%}
-    {% for verse in track['lyrics'].split('\n') %}
-    <ul class="text-center">{{ verse }}</ul>
-    {% endfor %}
+    <div id="flip" class="btn btn-primary toggle-down-bar">Lyrics</div>
+        <div id="panel">
+                {% for verse in track['lyrics'].split('\n') %}
+                    <ul class="text-center">{{ verse }}</ul>
+                {% endfor %}
+        </div>
+{% endif %}
+
+{% if artist %}
+    <div>
+        <p><img class="img-center" src="{{ artist['artist banner'] }}" alt="Artist banner not found"></p>
+        <p id="artistbio">Artist bio: {{ artist['artist_bio'] }}</p>
+        <div class="container">
+            <div class="row">
+                <div class="col-md">
+                    <p>Genre: {{ artist['genre'] }}</p>
+                    <p>Style: {{ artist['style'] }}</p>
+                    <p>Mood: {{ artist['mood'] }}</p>
+                    <p>{% if track %}Duration: {{ track['duration']['minutes'] }}:{{ track['duration']['seconds'] }} {% endif %}</p>
+                </div>
+
+                <div class="col-md">
+                    <p>Formed year: {{ artist['formed_year'] }}</p>
+                    <p>Number of members: {{ artist['number of members'] }}
+                    <p>Country: {{ artist['country'] }}</p>
+                    <p>Website: {{ artist['website'] }}</p>
+                </div>
+            </div>
+
+        </div>
+
+        <div>
+            Discography:
+            {% for album in artist['discography'] %}
+                <ul>Album: {{ album['strAlbum'] }} Year: {{ album['intYearReleased'] }}</ul>
+            {% endfor %}
+        </div>
+    </div>
+{% else %}
+    <div>{{ audiodb_error }}</div>
 {% endif %}
 {#    audio features chart#}
-    <script>
-        new Chartist.Bar('.ct-chart', {
-          labels: ['energy', 'speechiness', 'acousticness', 'instrumentalness', 'liveness', 'valence'],
-          series: [
-            [{{ audio_features['energy'] }}, {{ audio_features['speechiness'] }}, {{ audio_features['acousticness'] }},
-                {{ audio_features['instrumentalness'] }}, {{ audio_features['liveness'] }}, {{ audio_features['valence'] }}]
-          ]
-        }, {
-          seriesBarDistance: 10,
-          reverseData: true,
-          horizontalBars: true,
-          axisY: {
-            offset: 70
-          }
-        });
+<script>
+    new Chartist.Bar('.ct-chart', {
+      labels: ['energy', 'speechiness', 'acousticness', 'instrumentalness', 'liveness', 'valence'],
+      series: [
+        [{{ audio_features['energy'] }}, {{ audio_features['speechiness'] }}, {{ audio_features['acousticness'] }},
+            {{ audio_features['instrumentalness'] }}, {{ audio_features['liveness'] }}, {{ audio_features['valence'] }}]
+      ]
+    }, {
+      seriesBarDistance: 10,
+      reverseData: true,
+      horizontalBars: true,
+      axisY: {
+        offset: 70
+      }
+    });
 
-    </script>
+</script>
 {% endblock %}
