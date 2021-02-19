@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="containter narrow">
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ wtf.form_field(form.artist_id) }}
+        </p>
+    <div class="container">
+        <p>{{ wtf.form_field(form.submit) }}  {% if error_message %} Wrong ID {% endif %}</p>
+    </div>
+    </form>
+</div>
+
+{% if track_id %}
+    <iframe class="img-center" src="https://open.spotify.com/embed/track/{{ track_id }}" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+{% endif %}
+{% endblock %}

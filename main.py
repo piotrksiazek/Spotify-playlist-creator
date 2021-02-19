@@ -70,6 +70,5 @@ def create_new_playlist_from_not_mentioned_top_songs(spot, old_playlist_id, new_
 #     print(key)
 #     print(value)
 #     print("\n\n--------------------------------------------------------------------------------\n\n")
-track = spotify.track("spotify:track:6y6GFyjVFwWI7lJbbbF0hU")
-# print(track)
-print(track['explicit'])
+tracks = Track.get_the_least_popular_track_id(spotify, "spotify:artist:0FRKTwQSToXpCxYMhyUzYY")
+print(tracks)

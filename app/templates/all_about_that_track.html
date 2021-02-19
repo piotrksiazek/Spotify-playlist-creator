@@ -18,7 +18,7 @@
 {% endif %}
 
 {% if audio_features %}
-    <div class="ct-chart ct-perfect-fourth container horizontal-chart"></div>
+    <div class="ct-chart ct-perfect-fourth container horizontal-chart narrow"></div>
 {% endif %}
 
 {% if  track['lyrics']%}
@@ -32,31 +32,58 @@
 
 {% if artist %}
     <div>
-        <p><img class="img-center" src="{{ artist['artist banner'] }}" alt="Artist banner not found"></p>
-        <p id="artistbio">Artist bio: {{ artist['artist_bio'] }}</p>
+{#        BIO#}
+        <div class="container">
+            <div class="card mb-3">
+              <img class="card-img-top" src="{{ artist['artist banner'] }}" alt="Card image cap">
+              <div class="card-body">
+                <h5 class="card-title">Artist bio</h5>
+                <p class="card-text text-justify">{{ artist['artist_bio'] }}</p>
+              </div>
+            </div>
+        </div>
         <div class="container">
             <div class="row">
-                <div class="col-md">
-                    <p>Genre: {{ artist['genre'] }}</p>
-                    <p>Style: {{ artist['style'] }}</p>
-                    <p>Mood: {{ artist['mood'] }}</p>
-                    <p>{% if track %}Duration: {{ track['duration']['minutes'] }}:{{ track['duration']['seconds'] }} {% endif %}</p>
-                </div>
-
-                <div class="col-md">
-                    <p>Formed year: {{ artist['formed_year'] }}</p>
-                    <p>Number of members: {{ artist['number of members'] }}
-                    <p>Country: {{ artist['country'] }}</p>
-                    <p>Website: {{ artist['website'] }}</p>
-                </div>
+                  <div class="col-sm-6">
+                    <div class="card">
+                      <div class="card-body">
+                        <h5 class="card-title"><span class="material-icons">vpn_key</span> Specifics</h5>
+                        <p class="card-text">
+                            <p>Genre: {{ artist['genre'] }}</p>
+                            <p>Style: {{ artist['style'] }}</p>
+                            <p>Mood: {{ artist['mood'] }}</p>
+                            <p>{% if track %}Duration: {{ track['duration']['minutes'] }}:{{ track['duration']['seconds'] }} {% endif %}</p>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="card">
+                      <div class="card-body">
+                        <h5 class="card-title">Second</h5>
+                        <p class="card-text">
+                            <p>Formed year: {{ artist['formed_year'] }}</p>
+                            <p>Number of members: {{ artist['number of members'] }}
+                            <p>Country: {{ artist['country'] }}</p>
+                            <p>Website: {{ artist['website'] }}</p>
+                            <p>Facebook: {{ artist['facebook'] }}</p>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
             </div>
-
-        </div>
-
-        <div>
-            Discography:
+{#        DISCOGRAPHY#}
+        <div class="card-group" style="padding-top: 2rem;">
             {% for album in artist['discography'] %}
-                <ul>Album: {{ album['strAlbum'] }} Year: {{ album['intYearReleased'] }}</ul>
+                <div class="card" style="min-width: 18rem;">
+                    <img class="card-img-top" src="{{ album["strAlbumThumb"] }}" alt="Cover img not found">
+                    <div class="card-body">
+                      <h5 class="card-title">{{ album['strAlbum'] }}</h5>
+                      <p class="card-text">{{ album["strDescriptionEN"] }}</p>
+                      <p class="card-text"><small class="text-muted">Year: {{ album['intYearReleased'] }}</small></p>
+                    </div>
+                </div>
+{#                <ul>Album: <img class="cover" src="{{ album["strAlbumThumb"] }}"> {{ album['strAlbum'] }} Year: {{ album['intYearReleased'] }}</ul>#}
             {% endfor %}
         </div>
     </div>

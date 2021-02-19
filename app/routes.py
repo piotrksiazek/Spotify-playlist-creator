@@ -2,7 +2,7 @@ from flask import render_template, redirect, url_for, flash
 import config
 from spotipy.oauth2 import SpotifyOAuth
 import spotipy
-from app.forms import OriginDestination, OriginDestination2, LoginForm, RegistrationForm, CreateNewPlaylist, DeleteUserPlaylist, TrackId
+from app.forms import OriginDestination, OriginDestination2, LoginForm, RegistrationForm, CreateNewPlaylist, DeleteUserPlaylist, TrackId, ArtistId
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app
 from app import models
@@ -133,6 +133,20 @@ def one_album_one_track():
 
     return render_template('one_album_one_track.html', form=form, error_message=error_message)
 
+@app.route('/get_least_popular_track', methods=['GET', 'POST'])
+@login_required
+def get_least_popular_track():
+    form = ArtistId()
+    track_id = ""
+    error_message = ""
+    if form.validate_on_submit():
+        artist_id = form.artist_id.data
+        try:
+            track_id = Track.get_the_least_popular_track_id(spotify, artist_id)
+        except spotipy.exceptions.SpotifyException:
+            error_message = "Wrong ID"
+    return render_template('least_popular_track.html', form=form, track_id=track_id, error_message=error_message)
+
 @app.route('/all_about_that_track', methods=['GET', 'POST'])
 @login_required
 def all_about_that_track():
@@ -160,6 +174,13 @@ def all_about_that_track():
 @login_required
 def actions():
     return render_template('Actions.html')
+
+#
+@app.route('/ajax')
+@login_required
+def ajax():
+    print("hello")
+    return ('', 204)
 
 if __name__ == '__main__':
     app.run(debug=True)

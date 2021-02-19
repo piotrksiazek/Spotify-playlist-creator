@@ -8,6 +8,9 @@ class TrackId(FlaskForm):
     track_id = StringField('Track ID', validators=[DataRequired()])
     submit = SubmitField('Get info')
 
+class ArtistId(FlaskForm):
+    artist_id = StringField('Artist ID', validators=[DataRequired()])
+    submit = SubmitField('Get info')
 
 class OriginDestination(FlaskForm):
     artist = StringField('Artist', validators=[DataRequired()])
