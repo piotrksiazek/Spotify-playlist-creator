@@ -158,3 +158,41 @@ class Playlist:
         playlist_items = spotify.playlist_items(playlist_id)['items']
         track_ids = [item['track']['id'] for item in playlist_items]
         spotify.user_playlist_remove_all_occurrences_of_tracks(user, playlist_id, track_ids)
+
+    @staticmethod
+    def get_all_track_ids_from_user_playlists(spotify: Spotify, user_id: str):
+        user_playlists_id = [playlist['id'] for playlist in spotify.user_playlists(user_id)['items']]
+        all_tracks = []
+        for playlist_id in user_playlists_id:
+            playlist = spotify.playlist_items(playlist_id)['items']
+            for track in playlist:
+                all_tracks.append(track['track']['id'])
+        return all_tracks
+
+    @staticmethod
+    def get_deep_recommendations(spotify: Spotify, user_id: str, seed: List[str], min_depth: int, size: int):
+        all_user_tracks = Playlist.get_all_track_ids_from_user_playlists(spotify, user_id)
+        recommendations = [track['id'] for track in spotify.recommendations(seed_tracks=seed)['tracks']]
+        new_seed = []
+        new_playlist = []
+
+        for level in range(min_depth):
+            for recommendation in recommendations:
+                if len(new_seed) == 5:
+                    break
+                if recommendation not in all_user_tracks:
+                    new_seed.append(recommendation)
+            recommendations = [track['id'] for track in spotify.recommendations(seed_tracks=new_seed)['tracks']]
+            new_seed = []
+
+        while len(new_playlist) < size:
+            for recommendation in recommendations:
+                if len(new_seed) == 5:
+                    break
+                if recommendation not in all_user_tracks:
+                    new_seed.append(recommendation)
+                    all_user_tracks.append(recommendation)
+                    new_playlist.append(recommendation)
+            recommendations = [track['id'] for track in spotify.recommendations(seed_tracks=new_seed)['tracks']]
+            new_seed = []
+        return new_playlist

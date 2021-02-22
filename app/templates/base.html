@@ -185,4 +185,13 @@ $(document).ready(function(){
         })
     })
 </script>
+{#seed checkboxes limiter#}
+<script>
+$('.seed :checkbox').change(function () {
+    var $checkboxes=$(this).closest('.seed').find(':checkbox:checked');
+    if ($checkboxes.length > 5) {
+        this.checked=false;
+    }
+});
+</script>
 </body>

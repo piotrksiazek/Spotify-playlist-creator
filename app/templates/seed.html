@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+{% if track_list %}
+    <div class="narrow seed">
+        <form method="POST" action="/deep_recommendations/seed">
+            <ul class="list-group">
+                {% for track in track_list %}
+                   <li class="list-group-item"><input type="checkbox" value="{{ track['id'] }}" name="seed">name: {{ track['name'] }} artist: {{ track['artist'] }}</li>
+                {% endfor %}
+
+            </ul>
+            <input class="btn btn-primary" type="submit">
+        </form>
+    </div>
+{% endif %}
+{% endblock %}
+

@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, flash
+from flask import render_template, redirect, url_for, flash, request, session, json
 import config
 from spotipy.oauth2 import SpotifyOAuth
 import spotipy
@@ -170,12 +170,49 @@ def all_about_that_track():
                            form=form, audio_features=audio_features, track=track, artist=artist,
                            error_message=error_message, audiodb_error=audiodb_error)
 
+@app.route('/deep_recommendations', methods=['GET', 'POST'])
+@login_required
+def deep_recommendations():
+    track_list = []
+    current_user_hosted_playlists = models.UserPlaylist.query.filter_by(user_id=current_user.id).all()
+    playlists_dict = {}
+    for playlist in spotify.user_playlists(current_user.spotify_id)['items']:
+        playlists_dict[playlist['name']] = playlist['id']
+    playlists_names = [name for name, name_id in playlists_dict.items()]
+    form = OriginDestination2()
+    # User can only manipulate playlists that belong to him
+    form.destination_playlist.choices = [playlist.playlist_name for playlist in current_user_hosted_playlists if
+                                         playlist.user_id == current_user.id]
+    form.origin_playlist.choices = playlists_names
+    if form.validate_on_submit():
+        playlist_items = spotify.playlist_items(playlists_dict[form.origin_playlist.data])['items']
+        for track in playlist_items:
+            track_dict = {"name": track['track']['name'], "id": track['track']['id'], "artist": track['track']['artists'][0]['name']}
+            track_list.append(track_dict)
+        session['track_list'] = track_list
+        session['destination_playlist'] = Playlist.get_playlist_id_with_name(spotify, form.destination_playlist.data, current_user.spotify_id)
+        return redirect(url_for('seed'))
+    # if request.method == 'POST' and request.form.getlist('seed'):
+    #     print(request.form.getlist('seed'))
+    return render_template('deep_recommendations.html', form=form)
+
+@app.route('/deep_recommendations/seed', methods=['GET', 'POST'])
+@login_required
+def seed():
+    track_list = session['track_list']
+    seed_list = request.form.getlist('seed')
+    if request.method == 'POST' and seed_list:
+        track_ids = Playlist.get_deep_recommendations(spotify, current_user.spotify_id, seed_list, 5, 10)
+        spotify.playlist_add_items('spotify:playlist:0hCXmoLAFhxr2XI2RwEdg8', track_ids)
+        print(spotify.recommendations(seed_tracks=seed_list)['tracks'])
+    return render_template('seed.html', track_list=track_list)
+
 @app.route('/actions')
 @login_required
 def actions():
     return render_template('Actions.html')
 
-#
+
 @app.route('/ajax')
 @login_required
 def ajax():

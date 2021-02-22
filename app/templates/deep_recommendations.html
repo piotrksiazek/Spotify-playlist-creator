@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="containter narrow">
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ wtf.form_field(form.origin_playlist) }}
+        </p>
+        <p>
+            {{ wtf.form_field(form.destination_playlist) }}
+        </p>
+        <div class="container">
+        <p>{{ wtf.form_field(form.submit) }}</p>
+        </div>
+    </form>
+</div>
+{#{% if track_list %}#}
+{#    <div >#}
+{#        <form method="POST" action="/deep_recommendations">#}
+{#            {% for track in track_list %}#}
+{#                {{ track['name'] }}<input type="checkbox" value="{{ track['id'] }}" name="seed" onclick="return checkboxCounter()">#}
+{#            {% endfor %}#}
+{#                <input type="submit">#}
+{#        </form>#}
+{#    </div>#}
+{#{% endif %}#}
+{% endblock %}
