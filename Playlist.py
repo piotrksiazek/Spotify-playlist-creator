@@ -170,29 +170,36 @@ class Playlist:
         return all_tracks
 
     @staticmethod
-    def get_deep_recommendations(spotify: Spotify, user_id: str, seed: List[str], min_depth: int, size: int):
+    def get_deep_recommendations(spotify: Spotify, user_id: str, seed_tracks: List[str], seed_genres: List[str], min_depth: int, size: int):
         all_user_tracks = Playlist.get_all_track_ids_from_user_playlists(spotify, user_id)
-        recommendations = [track['id'] for track in spotify.recommendations(seed_tracks=seed)['tracks']]
+
+        recommendations = spotify.recommendations(seed_tracks=seed_tracks, seed_genres=seed_genres)['tracks']
+        recommendations_ids = [track['id'] for track in recommendations]
+
         new_seed = []
         new_playlist = []
+        counter = 0
 
-        for level in range(min_depth):
-            for recommendation in recommendations:
-                if len(new_seed) == 5:
-                    break
-                if recommendation not in all_user_tracks:
-                    new_seed.append(recommendation)
-            recommendations = [track['id'] for track in spotify.recommendations(seed_tracks=new_seed)['tracks']]
-            new_seed = []
+        # for level in range(min_depth):
+        #     for recommendation in recommendations:
+        #         if len(new_seed) == 5:
+        #             break
+        #         if recommendation not in all_user_tracks:
+        #             new_seed.append(recommendation)
+        #     recommendations = [track['id'] for track in spotify.recommendations(seed_tracks=new_seed, seed_genres=seed_genres)['tracks']]
+        #     new_seed = []
 
         while len(new_playlist) < size:
-            for recommendation in recommendations:
-                if len(new_seed) == 5:
+            for recommendation in recommendations_ids:
+                if len(new_seed) == 5 - len(seed_genres):
                     break
                 if recommendation not in all_user_tracks:
                     new_seed.append(recommendation)
                     all_user_tracks.append(recommendation)
-                    new_playlist.append(recommendation)
-            recommendations = [track['id'] for track in spotify.recommendations(seed_tracks=new_seed)['tracks']]
+                    if counter > min_depth:
+                        new_playlist.append(recommendation)
+            recommendations = spotify.recommendations(seed_tracks=new_seed, seed_genres=seed_genres)['tracks']
+            recommendations_ids = [track['id'] for track in recommendations]
             new_seed = []
+            counter += 1
         return new_playlist

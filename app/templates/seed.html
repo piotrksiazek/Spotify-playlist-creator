@@ -9,6 +9,11 @@
                 {% endfor %}
 
             </ul>
+            <ul>
+                {% for genre in genre_list %}
+                <li class="list-group-item"><input type="checkbox" value="{{ genre }}" name="genre">{{ genre }}</li>
+                {% endfor %}
+            </ul>
             <input class="btn btn-primary" type="submit">
         </form>
     </div>

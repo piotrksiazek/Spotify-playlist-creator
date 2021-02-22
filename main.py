@@ -70,5 +70,12 @@ def create_new_playlist_from_not_mentioned_top_songs(spot, old_playlist_id, new_
 #     print(key)
 #     print(value)
 #     print("\n\n--------------------------------------------------------------------------------\n\n")
-# tracks = Playlist.get_deep_recommendations(spotify, 'spotify:user:rbegouu2bjgv6t268sa2dc9hj', ['spotify:track:4udBY8ZAsfQOjvdc0STCqb', '12iOM7n1XHIdxK1fRBJMs7', '0mkV15zALtx0qsKKYGyX4X', '1QtdHvQeFgSE7R7AuLPccZ'], 5, 10)
+# tracks = Playlist.get_deep_recommendations(spotify=spotify, user_id='rbegouu2bjgv6t268sa2dc9hj',
+#                                            seed_tracks=['12iOM7n1XHIdxK1fRBJMs7', '0mkV15zALtx0qsKKYGyX4X', '1QtdHvQeFgSE7R7AuLPccZ'],
+#                                            seed_genres=['alternative'], min_depth=5, size=10)
+
+# genre_list = spotify.recommendation_genre_seeds()['genres']
+# print(genre_list)
+
+# tracks = spotify.recommendations(seed_genres=['anime'], seed_tracks=['spotify:track:4udBY8ZAsfQOjvdc0STCqb', '12iOM7n1XHIdxK1fRBJMs7'])
 # print(tracks)

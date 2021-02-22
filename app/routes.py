@@ -187,25 +187,32 @@ def deep_recommendations():
     if form.validate_on_submit():
         playlist_items = spotify.playlist_items(playlists_dict[form.origin_playlist.data])['items']
         for track in playlist_items:
-            track_dict = {"name": track['track']['name'], "id": track['track']['id'], "artist": track['track']['artists'][0]['name']}
+            track_dict = {"name": track['track']['name'], "id": track['track']['id'],
+                          "artist": track['track']['artists'][0]['name'], "artist_id": track['track']['artists'][0]['id']}
             track_list.append(track_dict)
         session['track_list'] = track_list
-        session['destination_playlist'] = Playlist.get_playlist_id_with_name(spotify, form.destination_playlist.data, current_user.spotify_id)
+        session['destination_playlist'] = models.UserPlaylist.query.filter_by(user_id=current_user.id, playlist_name=form.destination_playlist.data).first().playlist_id
         return redirect(url_for('seed'))
-    # if request.method == 'POST' and request.form.getlist('seed'):
-    #     print(request.form.getlist('seed'))
+
     return render_template('deep_recommendations.html', form=form)
 
 @app.route('/deep_recommendations/seed', methods=['GET', 'POST'])
 @login_required
 def seed():
     track_list = session['track_list']
-    seed_list = request.form.getlist('seed')
-    if request.method == 'POST' and seed_list:
-        track_ids = Playlist.get_deep_recommendations(spotify, current_user.spotify_id, seed_list, 5, 10)
-        spotify.playlist_add_items('spotify:playlist:0hCXmoLAFhxr2XI2RwEdg8', track_ids)
-        print(spotify.recommendations(seed_tracks=seed_list)['tracks'])
-    return render_template('seed.html', track_list=track_list)
+    genre_list = spotify.recommendation_genre_seeds()['genres']
+
+    destination_playlist = session['destination_playlist']
+
+    if request.method == 'POST':
+        seed_tracks = request.form.getlist('seed')
+        seed_genres = request.form.getlist('genre')
+        print(seed_genres)
+        if seed_tracks or seed_genres:
+            track_ids = Playlist.get_deep_recommendations(spotify, current_user.spotify_id,
+                                                          seed_tracks, seed_genres, 5, 10)
+            spotify.playlist_add_items(destination_playlist, track_ids)
+    return render_template('seed.html', track_list=track_list, genre_list=genre_list)
 
 @app.route('/actions')
 @login_required
