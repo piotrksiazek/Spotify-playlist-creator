@@ -72,6 +72,12 @@ def index():
 @login_required
 def my_items():
     user_playlists = models.UserPlaylist.query.filter_by(user_id=current_user.id).all()
+    user_playlists_dict_list = []
+    for playlist in user_playlists:
+        playlist_response = spotify.playlist(playlist.playlist_id)
+        playlist_dict = {'name': playlist.playlist_name,
+                         'link': playlist_response['external_urls']['spotify']}
+        user_playlists_dict_list.append(playlist_dict)
     create_form = CreateNewPlaylist()
     delete_form = DeleteUserPlaylist()
     delete_form.user_playlist.choices = [playlist.playlist_name for playlist in user_playlists if playlist.user_id == current_user.id]
@@ -90,7 +96,7 @@ def my_items():
     if delete_form.validate_on_submit():
         playlist_to_clear = models.UserPlaylist.query.filter_by(playlist_name=delete_form.user_playlist.data).first().playlist_id
         Playlist.clear_playlist(spotify=spotify, playlist_id=playlist_to_clear, user=user)
-    return render_template('my_items.html', form=create_form, up=user_playlists, delete_form=delete_form,
+    return render_template('my_items.html', form=create_form, up=user_playlists_dict_list, delete_form=delete_form,
                            is_unique=is_unique, number_of_user_playlists=number_of_user_playlists)
 
 

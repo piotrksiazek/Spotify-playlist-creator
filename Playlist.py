@@ -155,6 +155,12 @@ class Playlist:
 
     @staticmethod
     def clear_playlist(spotify: Spotify, playlist_id: str, user: str) -> None:
+        """
+        Deletes all songs from a playlist but not the playlist itself.
+        :param spotify: spotipy.Spotify class instance.
+        :param playlist_id: id of playlist to clear. Must be owned by user and hosted on account.
+        :param user: spotify user id.
+        """
         playlist_items = spotify.playlist_items(playlist_id)['items']
         track_ids = [item['track']['id'] for item in playlist_items]
         spotify.user_playlist_remove_all_occurrences_of_tracks(user, playlist_id, track_ids)
@@ -179,15 +185,6 @@ class Playlist:
         new_seed = []
         new_playlist = []
         counter = 0
-
-        # for level in range(min_depth):
-        #     for recommendation in recommendations:
-        #         if len(new_seed) == 5:
-        #             break
-        #         if recommendation not in all_user_tracks:
-        #             new_seed.append(recommendation)
-        #     recommendations = [track['id'] for track in spotify.recommendations(seed_tracks=new_seed, seed_genres=seed_genres)['tracks']]
-        #     new_seed = []
 
         while len(new_playlist) < size:
             for recommendation in recommendations_ids:

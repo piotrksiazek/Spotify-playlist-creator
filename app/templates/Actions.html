@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container text-center bg row narrow">
+<div class="container text-center bg row narrow centered-button">
 
-    <a href="{{url_for('mirror')}}" class="btn btn-primary centered top-buffer col-xs-12" data-toggle="tooltip" title="Takes each track from given playlist and replaces it with the least popular track from the same artist.">Mirror playlist</a>
-    <a href="{{ url_for('one_album_one_track') }}" class="btn btn-primary centered top-buffer col-xs-12" data-toggle="tooltip" title="Creates playlist that contains one random track from every album from given aritst.">One track for one album</a>
-    <a href="{{ url_for('all_about_that_track') }}" class="btn btn-primary centered top-buffer col-xs-12">All about that track</a>
-    <a href="{{ url_for('get_least_popular_track') }}" class="btn btn-primary centered top-buffer col-xs-12">Least popular track</a>
-    <a href="{{ url_for('deep_recommendations') }}" class="btn btn-primary centered top-buffer col-xs-12">Deep recommendations</a>
+    <a href="{{url_for('mirror')}}" class="btn btn-primary centered top-buffer col-xs-12 actions-buttons" data-toggle="tooltip" title="Takes each track from given playlist and replaces it with the least popular track from the same artist.">Mirror playlist</a>
+    <a href="{{ url_for('one_album_one_track') }}" class="btn btn-primary centered top-buffer col-xs-12 actions-buttons" data-toggle="tooltip" title="Creates playlist that contains one random track from every album from given aritst.">One track for one album</a>
+    <a href="{{ url_for('all_about_that_track') }}" class="btn btn-primary centered top-buffer col-xs-12 actions-buttons" data-toggle="tooltip" title="Returns information about given track">All about that track</a>
+    <a href="{{ url_for('get_least_popular_track') }}" class="btn btn-primary centered top-buffer col-xs-12 actions-buttons" data-toggle="tooltip" title="Returns track with least popularity (not views) from given artist.">Least popular track</a>
+    <a href="{{ url_for('deep_recommendations') }}" class="btn btn-primary centered top-buffer col-xs-12 actions-buttons" data-toggle="tooltip" title="Creates playlist based on given seed and depth of search.">Deep recommendations</a>
 
 
 </div>

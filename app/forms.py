@@ -30,7 +30,7 @@ class CreateNewPlaylist(FlaskForm):
 
 class DeleteUserPlaylist(FlaskForm):
     user_playlist = SelectField('Playlist name', choices=[], validators=[DataRequired()])
-    submit = SubmitField('Delete')
+    submit = SubmitField('Clear')
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])

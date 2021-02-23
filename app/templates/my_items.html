@@ -34,8 +34,12 @@
         <p>{{ wtf.form_field(delete_form.submit) }}</p>
         </div>
     </form>
-{#{% for p in up %}#}
-{#<p class="list-group-item">{{ p.playlist_name }}</p>#}
-{#{% endfor %}#}
+{% for p in up %}
+<a href="{{ p['link'] }}">
+    <p class="list-group-item text-white" style="border-radius: 20px; background-color: #1DB954;" >
+        <span class="material-icons" style="transform: rotate(270deg);">contactless</span>   {{ p['name'] }}
+    </p>
+</a>
+{% endfor %}
 </div>
 {% endblock %}

@@ -79,3 +79,6 @@ def create_new_playlist_from_not_mentioned_top_songs(spot, old_playlist_id, new_
 
 # tracks = spotify.recommendations(seed_genres=['anime'], seed_tracks=['spotify:track:4udBY8ZAsfQOjvdc0STCqb', '12iOM7n1XHIdxK1fRBJMs7'])
 # print(tracks)
+
+p = spotify.playlist('spotify:playlist:1y10sXdbQV7tNXaSPLkdPg')['images'][0]['url']
+print(p)
