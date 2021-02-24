@@ -167,6 +167,11 @@ class Playlist:
 
     @staticmethod
     def get_all_track_ids_from_user_playlists(spotify: Spotify, user_id: str):
+        """
+        :param spotify: spotipy.Spotify class instance.
+        :param user_id: id of user.
+        :returns List of all tracks of user on public playlists.
+        """
         user_playlists_id = [playlist['id'] for playlist in spotify.user_playlists(user_id)['items']]
         all_tracks = []
         for playlist_id in user_playlists_id:
@@ -177,6 +182,18 @@ class Playlist:
 
     @staticmethod
     def get_deep_recommendations(spotify: Spotify, user_id: str, seed_tracks: List[str], seed_genres: List[str], min_depth: int, size: int):
+        """
+        Searches spotify using recommendations and based on depth parameter, searches for recommendations of recommendations
+        so that returned list of tracks isn't directly related to seed tracks. Seed_tracks and seed_genres cant't exceed
+        more than 5 elements when added.
+        :param spotify.Spotify class instance.
+        :param user_id: id of user.
+        :param seed_tracks: list of track ids.
+        :param seed_genres: list of genres.
+        :param min_depth: Amount of iterations before anything can be added to playlist.
+        :param size: Output track list size.
+        :returns list of tracks to be added to playlist.
+        """
         all_user_tracks = Playlist.get_all_track_ids_from_user_playlists(spotify, user_id)
 
         recommendations = spotify.recommendations(seed_tracks=seed_tracks, seed_genres=seed_genres)['tracks']

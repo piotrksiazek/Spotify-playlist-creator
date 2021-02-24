@@ -38,6 +38,7 @@ def logout():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error_message = ""
+    registered = session['registered']
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = LoginForm()
@@ -47,8 +48,9 @@ def login():
             error_message = 'Invalid username or password'
         else:
             login_user(user_object, remember=form.remember_me.data)
+            session['registered'] = ''
             return redirect(url_for('index'))
-    return render_template('login.html', title='Sign In', form=form, error_message=error_message)
+    return render_template('login.html', title='Sign In', form=form, error_message=error_message, registered=registered)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -60,7 +62,7 @@ def register():
         user_object.set_password(form.password.data)
         db.session.add(user_object)
         db.session.commit()
-        flash('Congratulations, you are now a registered user!')
+        session['registered'] = f'Welcome {form.username.data}. You can now login.'
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
