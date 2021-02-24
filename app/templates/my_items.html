@@ -12,7 +12,7 @@
                 <p>{{ wtf.form_field(form.submit) }}</p>
                 <p>Name must be unique</p>
             </div>
-        {% elif number_of_user_playlists > 3%}
+        {% elif number_of_user_playlists == 3%}
             <div>
                 <p>{{ wtf.form_field(form.submit) }}</p>
                 <p>User can own up to 3 playlists</p>

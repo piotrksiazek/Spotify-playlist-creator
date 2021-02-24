@@ -72,6 +72,7 @@ def index():
 @login_required
 def my_items():
     user_playlists = models.UserPlaylist.query.filter_by(user_id=current_user.id).all()
+    print('xD')
     user_playlists_dict_list = []
     for playlist in user_playlists:
         playlist_response = spotify.playlist(playlist.playlist_id)
@@ -86,8 +87,8 @@ def my_items():
     if create_form.validate_on_submit():
         name = create_form.playlist_name.data
         is_unique = Playlist.is_playlist_name_unique(spotify, name, user)
-        number_of_user_playlists = len(user_playlists)
-        if is_unique and len(user_playlists) <= 3:
+        number_of_user_playlists = len(models.UserPlaylist.query.filter_by(user_id=current_user.id).all())
+        if is_unique and number_of_user_playlists < 3:
             Playlist.create_new_playlist(spotify=spotify, name=name, user=user)
             playlist = models.UserPlaylist(playlist_name=name, playlist_id=Playlist.get_playlist_id_with_name(spotify, name, user), user=current_user)
             db.session.add(playlist)
