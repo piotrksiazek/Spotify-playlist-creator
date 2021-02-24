@@ -1,6 +1,7 @@
 # Spotify playlist creator
 
 > Web application made with Python, Flask, SQLAlchemy, Spotipy and Bootstrap.
+> Live version https://spotifycreator.herokuapp.com/
 
 ## Installation
 ---
