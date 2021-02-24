@@ -29,12 +29,12 @@ my account but you are the only one that can modify them). After submitting, des
 matching artists, but with different tracks. For example if you have:
 ```
 Stairway to heaven - Led Zeppelin
-Little wing - Jimmy Hendrix
+Little wing - Jimi Hendrix
 ```
 The final playlist may look like:
 ```
 No Quarter - Led Zeppelin
-Purple Haze - Jimmy Hendrix
+Purple Haze - Jimi Hendrix
 ```
 * One track for one album - pretty self explanatory. You enter spotify artist id, select destination playlist and you get one track from each album.
 
