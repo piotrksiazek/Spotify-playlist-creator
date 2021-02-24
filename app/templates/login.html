@@ -14,5 +14,8 @@
         </p>
         <p>{{ wtf.form_field(form.submit) }}</p>
     </form>
+    {% if error_message %}
+        <p>{{ error_message }}</p>
+    {% endif %}
 </div>
 {% endblock %}

@@ -37,17 +37,18 @@ def logout():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    error_message = ""
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = LoginForm()
     if form.validate_on_submit():
         user_object = models.User.query.filter_by(username=form.username.data).first()
         if user_object is None or not user_object.check_password(form.password.data):
-            print('Invalid username or password')
+            error_message = 'Invalid username or password'
+        else:
+            login_user(user_object, remember=form.remember_me.data)
             return redirect(url_for('index'))
-        login_user(user_object, remember=form.remember_me.data)
-        return redirect(url_for('index'))
-    return render_template('login.html', title='Sign In', form=form)
+    return render_template('login.html', title='Sign In', form=form, error_message=error_message)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
