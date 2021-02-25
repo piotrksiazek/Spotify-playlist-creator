@@ -226,11 +226,5 @@ def actions():
     return render_template('Actions.html')
 
 
-@app.route('/ajax')
-@login_required
-def ajax():
-    print("hello")
-    return ('', 204)
-
 if __name__ == '__main__':
     app.run(debug=True)

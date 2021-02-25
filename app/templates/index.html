@@ -1,32 +1,32 @@
 {% extends "base.html" %}
 {% block content %}
     <div class="narrow">
-        <h2 style="margin-top:20px; border-radius: 10px; padding: 10px; text-align: center;" class="bg-dark text-white">Getting started</h2>
+        <h2 class="bg-dark text-white main-header">Getting started</h2>
 
-        <div style="background: darkgray; padding: 20px; border-radius: 10px;" class="bg-dark text-white">
+        <div class="bg-dark text-white info-block">
             <h3 style="text-align: center;" class="text-warning">Where is my spotify ID?</h3>
             <p>Spotify ID is an unique identifier linked to your personal account.<br> To find it you will need to:</p>
             <ol>
                 <li>Click your username at the top right corner.</li>
-                <li>Click <img style="height: 40px; width: 40px;" src="static\images\dots.png" alt="three dots"> under your profile.</li>
+                <li>Click <img id="three-dots" src="static\images\dots.png" alt="three dots"> under your profile.</li>
                 <li>Hover mouse over <b>share</b></li>
                 <li>Click <b>Copy Spotify URI</b></li>
                 <li>Done! Now your Spotify ID is copied to your clipboard.</li>
             </ol>
         </div>
 
-        <div style="background: darkgray; padding: 20px; border-radius: 10px; margin-top: 10px; margin-bottom: 10px;" class="bg-dark text-white">
+        <div class="bg-dark text-white info-block">
             <h3 style="text-align: center;" class="text-warning">Where do created playlists go?</h3>
             <p>Playlists that are created via this website don't live on your personal Spotify
-            account. They are hosted on [!link!] and to make them truly yours, you can <b>subscribe</b> to them.</p>
+            account. They are hosted <a class="text-primary" href="https://open.spotify.com/user/rbegouu2bjgv6t268sa2dc9hj?si=8GQx5B4uToC8xtcqR2krFQ">here</a> and to make them truly yours, you can <b>subscribe</b> to them.</p>
         </div>
 
-        <div style="background: darkgray; padding: 20px; border-radius: 10px; margin-top: 10px; margin-bottom: 10px;" class="bg-dark text-white">
+        <div class="bg-dark text-white info-block">
             <h3 style="text-align: center;" class="text-warning">How many playlists can I have?</h3>
             <p>Each user can create at most <b>3</b> playlists.</p>
         </div>
 
-        <div style="background: darkgray; padding: 20px; border-radius: 10px; margin-top: 10px; margin-bottom: 10px;" class="bg-dark text-white">
+        <div class="bg-dark text-white info-block">
             <h3 style="text-align: center;" class="text-warning">Can I delete playlist?</h3>
             <p>Unfortunately Spotify API doesn't make deleting playlists possible, but you can clear its content <a class="text-primary" href="{{ url_for('my_items') }}">here</a></p>
         </div>
