@@ -12,6 +12,7 @@ $ pip install -r requirements.txt
 $ export SPOTIPY_CLIENT_ID='your_client_id'
 $ export SPOTIPY_CLIENT_SECRET='your_client_secret'
 $ export SPOTIPY_REDIRECT_URI='your_redirect_uri'
+$ export FLASK_APP='api.py'
 $ flask run
 ```
 ---
