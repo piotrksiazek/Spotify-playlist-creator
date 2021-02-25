@@ -202,8 +202,9 @@ class Playlist:
         new_seed = []
         new_playlist = []
         counter = 0
+        max_iter = 50 + min_depth
 
-        while len(new_playlist) < size:
+        while counter < max_iter:
             for recommendation in recommendations_ids:
                 if len(new_seed) == 5 - len(seed_genres):
                     break
@@ -211,9 +212,26 @@ class Playlist:
                     new_seed.append(recommendation)
                     all_user_tracks.append(recommendation)
                     if counter > min_depth:
-                        new_playlist.append(recommendation)
+                        if len(new_playlist) == size:
+                            return new_playlist
+                        else:
+                            new_playlist.append(recommendation)
             recommendations = spotify.recommendations(seed_tracks=new_seed, seed_genres=seed_genres)['tracks']
             recommendations_ids = [track['id'] for track in recommendations]
             new_seed = []
             counter += 1
         return new_playlist
+
+    @staticmethod
+    def create_new_playlist_from_not_mentioned_songs(spotify: Spotify, old_playlist_id: str, new_playlist_id: str) -> None:
+        """
+        Creates spotify playlist where each track in new playlist corresponds to a track from old playlist. Artist remains
+        the same - eg. Little Wing by Jimi Hendrix may become Purple Haze but certainly not Stairway to Heaven.
+        :param spotify: spotipy.Spotify class instance.
+        :param old_playlist_id: id of origin playlist
+        :param new_playlist_id: id of destination playlist
+        """
+        artists_from_old_playlist = Playlist.get_playlist_items(spotify, old_playlist_id, 'artist', unique=True)
+        tracks_from_old_playlist = Playlist.get_playlist_items(spotify, old_playlist_id, 'track', unique=False)
+        new_track_list = Playlist.get_non_popular_tracks(spotify, artists_from_old_playlist, tracks_from_old_playlist)
+        spotify.user_playlist_add_tracks(user=spotify, playlist_id=new_playlist_id, tracks=new_track_list)

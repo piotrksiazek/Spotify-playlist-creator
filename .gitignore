@@ -2,3 +2,4 @@ venv
 .idea
 .cache-mk42i2nsbq7yzgifrmt3izeuj
 things that may have worked but they dont
+app/templates/home.html

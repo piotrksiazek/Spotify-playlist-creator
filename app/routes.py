@@ -1,27 +1,14 @@
-from flask import render_template, redirect, url_for, flash, request, session, json
-import config
-from spotipy.oauth2 import SpotifyOAuth
+from flask import render_template, redirect, url_for, request, session
 import spotipy
 from app.forms import OriginDestination, OriginDestination2, LoginForm, RegistrationForm, CreateNewPlaylist, DeleteUserPlaylist, TrackId, ArtistId
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app
 from app import models
 from app import db
-from app import scheduler
-from app import spotify, user, scope, my_uri
+from app import spotify, user
 from Playlist import Playlist
 from Track import Track
 from main import create_new_playlist_from_not_mentioned_top_songs
-
-# scope = config.scope
-# my_uri = config.my_uri
-# user = config.user
-# spotify = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
-
-
-@app.before_first_request
-def start_scheduler():
-    scheduler.start()
 
 
 @app.login_manager.user_loader
@@ -38,7 +25,12 @@ def logout():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error_message = ""
-    registered = session['registered']
+    try:
+        #in case current user has not registered a new accound during this session
+        registered = session['registered']
+    except KeyError:
+        registered = ''
+
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = LoginForm()
@@ -119,10 +111,7 @@ def mirror():
 
     if form.validate_on_submit():
         playlists_dict[form.destination_playlist.data] = Playlist.get_playlist_id_with_name(spotify, form.destination_playlist.data, user)
-        # scheduler.add_job(id='scheduled_task',
-        #                       func=lambda : create_new_playlist_from_not_mentioned_top_songs(spotify, playlists_dict[form.origin_playlist.data],
-        #                     playlists_dict[form.destination_playlist.data]), trigger='interval', seconds=8)
-        create_new_playlist_from_not_mentioned_top_songs(spotify, playlists_dict[form.origin_playlist.data],
+        Playlist.create_new_playlist_from_not_mentioned_songs(spotify, playlists_dict[form.origin_playlist.data],
                                                          playlists_dict[form.destination_playlist.data])
     return render_template('mirror.html', playlists=playlists_names, form=form)
 
@@ -184,6 +173,7 @@ def all_about_that_track():
 @login_required
 def deep_recommendations():
     track_list = []
+    error_message = ""
     current_user_hosted_playlists = models.UserPlaylist.query.filter_by(user_id=current_user.id).all()
     playlists_dict = {}
     for playlist in spotify.user_playlists(current_user.spotify_id)['items']:
@@ -195,6 +185,9 @@ def deep_recommendations():
                                          playlist.user_id == current_user.id]
     form.origin_playlist.choices = playlists_names
     if form.validate_on_submit():
+        if not spotify.playlist_items(playlists_dict[form.origin_playlist.data])['items']:
+            error_message = "Origin playlist can't be empty."
+            return render_template('deep_recommendations.html', form=form, error_message=error_message)
         playlist_items = spotify.playlist_items(playlists_dict[form.origin_playlist.data])['items']
         for track in playlist_items:
             track_dict = {"name": track['track']['name'], "id": track['track']['id'],
@@ -216,12 +209,15 @@ def seed():
 
     if request.method == 'POST':
         seed_tracks = request.form.getlist('seed')
-        seed_genres = request.form.getlist('genre')
+        seed_genres = [request.form.get('genre')]
+        depth = int(request.form.get('depth'))
+        size = int(request.form.get('size'))
         print(seed_genres)
         if seed_tracks or seed_genres:
             track_ids = Playlist.get_deep_recommendations(spotify, current_user.spotify_id,
-                                                          seed_tracks, seed_genres, 5, 10)
+                                                          seed_tracks, seed_genres, depth, size)
             spotify.playlist_add_items(destination_playlist, track_ids)
+            return redirect(url_for('deep_recommendations'))
     return render_template('seed.html', track_list=track_list, genre_list=genre_list)
 
 @app.route('/actions')
