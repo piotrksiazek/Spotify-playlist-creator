@@ -8,7 +8,6 @@ from app import db
 from app import spotify, user
 from Playlist import Playlist
 from Track import Track
-from main import create_new_playlist_from_not_mentioned_top_songs
 
 
 @app.login_manager.user_loader
