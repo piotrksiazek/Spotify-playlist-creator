@@ -18,7 +18,7 @@ $ flask run
 * Go to actions
 * Go to deep recommendations
 * Follow the link that popped up in the terminal
-* Copy and paste url you were redirected to in the terminalc
+* Copy and paste url you were redirected to in the terminal
 * Ctrl + c to abort
 ```shell
 $ flask run
