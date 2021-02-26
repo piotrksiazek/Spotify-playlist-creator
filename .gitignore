@@ -4,4 +4,3 @@ venv
 things that may have worked but they dont
 app/templates/home.html
 main.py
-.cache
