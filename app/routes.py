@@ -49,7 +49,10 @@ def register():
         return redirect(url_for('index'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        user_object = models.User(username=form.username.data, email=form.email.data, spotify_id=form.spotify_id.data)
+        spotify_id = form.spotify_id.data
+        if spotify_id[0:13] == 'spotify:user:':
+            spotify_id = spotify_id[13:]
+        user_object = models.User(username=form.username.data, email=form.email.data, spotify_id=spotify_id)
         user_object.set_password(form.password.data)
         db.session.add(user_object)
         db.session.commit()

@@ -2,7 +2,7 @@
 {% block content %}
 <div class="container" style="width: 50%;">
     {% if registered %}
-        <p>{{ registered }}</p>
+        <p style="text-align: center; margin: 4px;">{{ registered }}</p>
     {% endif %}
     <form action="" method="post" novalidate>
         {{ form.hidden_tag() }}
