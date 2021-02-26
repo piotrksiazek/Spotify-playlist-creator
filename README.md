@@ -11,8 +11,16 @@ $ git clone https://github.com/piotrksiazek/Spotify-playlist-creator.git
 $ pip install -r requirements.txt
 $ export SPOTIPY_CLIENT_ID='your_client_id'
 $ export SPOTIPY_CLIENT_SECRET='your_client_secret'
-$ export SPOTIPY_REDIRECT_URI='your_redirect_uri'
+$ export SPOTIPY_REDIRECT_URI='https://www.spotify.com/pl/'
 $ export FLASK_APP='api.py'
+$ flask run
+```
+* Go to actions
+* Go to deep recommendations
+* Follow the link that popped up in the terminal
+* Copy and paste url you were redirected to in the terminalc
+* Ctrl + c to abort
+```shell
 $ flask run
 ```
 ---
