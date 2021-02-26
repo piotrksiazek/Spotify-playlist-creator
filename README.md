@@ -3,21 +3,6 @@
 > Web application made with Python, Flask, SQLAlchemy, Spotipy and Bootstrap.
 > Live version https://spotifycreator.herokuapp.com/
 
-## Installation
----
-```shell
-$ cd your/desired/directory
-$ git clone https://github.com/piotrksiazek/Spotify-playlist-creator.git
-$ pip install -r requirements.txt
-$ export SPOTIPY_CLIENT_ID='your_client_id'
-$ export SPOTIPY_CLIENT_SECRET='your_client_secret'
-$ export SPOTIPY_REDIRECT_URI='your_redirect_uri'
-$ flask run
-```
----
-
-Copy your localhost address from shell and you are now running local version of an app.
-
 ## Functionality
 
 After installation you will need to make a new account using login, password, email and spotify ID.
