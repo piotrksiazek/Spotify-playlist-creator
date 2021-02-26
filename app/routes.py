@@ -66,7 +66,6 @@ def index():
 @login_required
 def my_items():
     user_playlists = models.UserPlaylist.query.filter_by(user_id=current_user.id).all()
-    print('xD')
     user_playlists_dict_list = []
     for playlist in user_playlists:
         playlist_response = spotify.playlist(playlist.playlist_id)
@@ -87,6 +86,7 @@ def my_items():
             playlist = models.UserPlaylist(playlist_name=name, playlist_id=Playlist.get_playlist_id_with_name(spotify, name, user), user=current_user)
             db.session.add(playlist)
             db.session.commit()
+            return redirect('my_items')
 
     if delete_form.validate_on_submit():
         playlist_to_clear = models.UserPlaylist.query.filter_by(playlist_name=delete_form.user_playlist.data).first().playlist_id
